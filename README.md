@@ -1,4 +1,4 @@
-<img src="https://github.com/Lin8x/artem-mail/blob/master/topbar.jpg" width="100%" height="100">
+<img src="https://github.com/Lin8x/artem-mail/blob/master/topbar.jpg" width="100%" height="10%">
 
 <p align="center">
 <img src="https://github.com/Lin8x/artem-mail/blob/master/artemlogo.JPG">
