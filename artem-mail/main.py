@@ -8,6 +8,8 @@ import sys
 
 t = Tk()  # where m is the name of the main window object
 
+# theme Decal functions here {
+
 
 def topDecalBar():
     # top bar here
@@ -19,47 +21,57 @@ def topDecalBar():
     label.pack()
 
 
-def opengithub(site=0):  # dynamic github site opener
-    # 0= home git page
-    # 1= report issue site
-    # 2= wiki page
-    url = "https://github.com/Lin8x/artem-mail"
-    if site == 1:
-        url += "/issues"
-    elif site == 2:
-        url += "wiki"
+def addHelpMenu(tkobject):
+    '''returns a Menu object'''
+    helpmenu = Menu(tkobject, tearoff=0)
+    helpmenu.add_command(label='About / Github Page', command=opengithub)
+    # point to github wiki page
+    helpmenu.add_command(label='Tool Documentation',
+                         command=lambda: opengithub(2))
+    # point to github issues page
+    helpmenu.add_command(label='Report Bugs/Glitches/Issues',
+                         command=lambda: opengithub(1))
+    return helpmenu
 
-    # os.system("open https://github.com/Lin8x/artem-mail") # this only works for MAC
-    webbrowser.open(url, new=2, autoraise=True)  # cross platform
 
+def setTopBarMenus():
+    # A MenuButton is a part of top-down menu which stays on the window all the time.
+    # Every menubutton has its own functionality.
+    topmenu = Menu(t)
 
-def startup():
-    t.title("Artem Mail Tool")  # title of the tool
-    t.geometry("500x400")  # Size of window
-    TITLE_FONT = ("Helvetica", 18, "bold")  # The font of words
+    # file menu button
+    filemenu = Menu(topmenu, tearoff=0)
+    filemenu.add_command(label='New Email')
+    # open template, read what info is needed, get info(messages,subject,files) and put in program
+    filemenu.add_command(label='Open template')
+    # store message/subject/name of files- into a txt file, file attachments will be in same directory as text file
+    filemenu.add_command(label='Save Email as template')
+    # opens a file widget and allows user to specify which txt file to use in program
+    filemenu.add_command(label='Open Email list File (txt file)')
+    filemenu.add_separator()
+    filemenu.add_command(label='Exit', command=sys.exit)
+    filemenu.add_command(label="Signout", command=loginpage)
+    topmenu.add_cascade(label='File', menu=filemenu)
 
-    # A frane is a rectangular region on the screen
-    # frame = Frame(t)
-    # frame.pack()
-    bottomframe = Frame(t)
-    bottomframe.pack(side=BOTTOM)
+    # settings menu button
+    settingsmenu = Menu(topmenu, tearoff=0)
+    settingsmenu.add_command(label='Options')
+    topmenu.add_cascade(label='Settings', menu=settingsmenu)
 
-    # A Canvas is used to draw pictures and other complex layout like graphics, text and widgets.
-    # c = Canvas(t, width=0, height=0)
-    # c.pack()
-    # canvas_height = 20
-    # canvas_width = 200
+    # help menu button
+    helpmenu = addHelpMenu(topmenu)
+    topmenu.add_cascade(label='Help', menu=helpmenu)
+    # applys the top menu bar to window
+    t.config(menu=topmenu)
 
-    loginpage()
+# } Decal functions
+# login page stuff here {
 
 
 def loginpage():
     menu = Menu(t)
     # help top menu bar for login screen
-    helpmenu = Menu(menu)
-    helpmenu.add_command(label='About / Github Page', command=opengithub)
-    helpmenu.add_command(label='Tool Documentation')
-    helpmenu.add_command(label='Report Bugs/Glitches/Issues')
+    helpmenu = addHelpMenu(menu)
     menu.add_cascade(label='Help', menu=helpmenu)
     t.config(menu=menu)
 
@@ -101,52 +113,60 @@ def loginpage():
 
 def checkLogin(userInput, passInput):
     if userInput.get() == "" or passInput.get() == "":
-        messagebox.showerror("Invalid Input", "Please try again")
+        messagebox.showerror(
+            "Invalid Input", "you entered nothing\nPlease try again")
+    elif len(userInput.get()) > 30 or len(userInput.get()) > 30:
+        messagebox.showerror(
+            "Invalid Input", "you have reached the max character threshold\nPlease try again")
+    elif userInput.get().find("@") != -1:
+        messagebox.showerror(
+            "Detected @ symbol", "Please enter only the username \nwithout @gmail.com")
     else:
         for i in t.winfo_children():  # loops through all children(widgets)
             i.destroy()
+        homepage()
+
+# } login page stuff
 
 
 def homepage():
-    print()
+    topDecalBar()
+    setTopBarMenus()
 
-# top menu bar when user logins
+
+def opengithub(site=0):  # dynamic github site opener
+    # 0= home git page
+    # 1= report issue site
+    # 2= wiki page
+    url = "https://github.com/Lin8x/artem-mail"
+    if site == 1:
+        url += "/issues"
+    elif site == 2:
+        url += "/wiki"
+
+    # os.system("open https://github.com/Lin8x/artem-mail") # this only works for MAC
+    # cross platform(new=2 opens a tab if webbroswer is already open)
+    webbrowser.open(url, new=2, autoraise=True)
 
 
-def setTopBarMenus():
-    # A MenuButton is a part of top-down menu which stays on the window all the time.
-    # Every menubutton has its own functionality.
-    topmenu = Menu(t)
+def startup():
+    t.title("Artem Mail Tool")  # title of the tool
+    t.geometry("500x400")  # Size of window
+    TITLE_FONT = ("Helvetica", 18, "bold")  # The font of words
 
-    # file menu button
-    filemenu = Menu(topmenu, tearoff=0)
-    filemenu.add_command(label='New Email')
-    # open template, read what info is needed, get info(messages,subject,files) and put in program
-    filemenu.add_command(label='Open template')
-    # store message/subject/name of files- into a txt file, file attachments will be in same directory as text file
-    filemenu.add_command(label='Save Email as template')
-    # opens a file widget and allows user to specify which txt file to use in program
-    filemenu.add_command(label='Open Email list File (txt file)')
-    filemenu.add_separator()
-    filemenu.add_command(label='Exit', command=sys.exit)
-    topmenu.add_cascade(label='File', menu=filemenu)
+    # A frane is a rectangular region on the screen
+    # frame = Frame(t)
+    # frame.pack()
+    bottomframe = Frame(t)
+    bottomframe.pack(side=BOTTOM)
 
-    # settings menu button
-    settingsmenu = Menu(topmenu, tearoff=0)
-    settingsmenu.add_command(label='Options')
-    topmenu.add_cascade(label='Settings', menu=settingsmenu)
+    # A Canvas is used to draw pictures and other complex layout like graphics, text and widgets.
+    # c = Canvas(t, width=0, height=0)
+    # c.pack()
+    # canvas_height = 20
+    # canvas_width = 200
 
-    # help menu button
-    helpmenu = Menu(topmenu, tearoff=0)
-    helpmenu.add_command(label='About / Github Page', command=opengithub)
-    # point to github wiki page
-    helpmenu.add_command(label='Tool Documentation',
-                         command=lambda: opengithub(2))
-    # point to github issues page
-    helpmenu.add_command(label='Report Bugs/Glitches/Issues',
-                         command=lambda: opengithub(1))
-    topmenu.add_cascade(label='Help', menu=helpmenu)
-    # applys the top menu bar to window
-    t.config(menu=topmenu)
+    loginpage()
+
+
 startup()
-
