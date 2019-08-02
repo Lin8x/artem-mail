@@ -14,11 +14,20 @@ t = Tk()  # where m is the name of the main window object
 def topDecalBar():
     # top bar here
     image = Image.open("topbar.jpg")
-    image = image.resize((500, 20), Image.ANTIALIAS)
+    image = image.resize((image.size[0], 20), Image.ANTIALIAS)
     photo = ImageTk.PhotoImage(image)
     label = Label(image=photo)
     label.image = photo  # keep a reference!
-    label.pack()
+    label.pack(fill=X)
+
+
+def bottomDecalBar():
+    image = Image.open("topbar.jpg")
+    image = image.resize((image.size[0], 20), Image.ANTIALIAS)
+    photo = ImageTk.PhotoImage(image)
+    label = Label(image=photo)
+    label.image = photo  # keep a reference!
+    label.pack(side=BOTTOM, fill=X)
 
 
 def addHelpMenu(tkobject):
@@ -49,8 +58,8 @@ def setTopBarMenus():
     # opens a file widget and allows user to specify which txt file to use in program
     filemenu.add_command(label='Open Email list File (txt file)')
     filemenu.add_separator()
-    filemenu.add_command(label='Exit', command=sys.exit)
     filemenu.add_command(label="Signout", command=loginpage)
+    filemenu.add_command(label='Exit', command=sys.exit)
     topmenu.add_cascade(label='File', menu=filemenu)
 
     # settings menu button
@@ -69,6 +78,7 @@ def setTopBarMenus():
 
 
 def loginpage():
+    clearScreen()
     menu = Menu(t)
     # help top menu bar for login screen
     helpmenu = addHelpMenu(menu)
@@ -108,10 +118,11 @@ def loginpage():
                      command=lambda: checkLogin(E1, E2))
     button1.pack()
     button2.pack()
+    bottomDecalBar()
     t.mainloop()
 
 
-def checkLogin(userInput, passInput):
+def checkLogin(userInput, passInput):  # prevents invalid inputs
     if userInput.get() == "" or passInput.get() == "":
         messagebox.showerror(
             "Invalid Input", "you entered nothing\nPlease try again")
@@ -122,8 +133,7 @@ def checkLogin(userInput, passInput):
         messagebox.showerror(
             "Detected @ symbol", "Please enter only the username \nwithout @gmail.com")
     else:
-        for i in t.winfo_children():  # loops through all children(widgets)
-            i.destroy()
+        clearScreen()
         homepage()
 
 # } login page stuff
@@ -132,6 +142,10 @@ def checkLogin(userInput, passInput):
 def homepage():
     topDecalBar()
     setTopBarMenus()
+    # homepage widgets go here
+    title = Label(t, text="Newsletter", font=("arial", 20, "bold"))
+    title.pack(side=TOP)
+    bottomDecalBar()  # this stay at bottom
 
 
 def opengithub(site=0):  # dynamic github site opener
@@ -167,6 +181,11 @@ def startup():
     # canvas_width = 200
 
     loginpage()
+
+
+def clearScreen():
+    for i in t.winfo_children():  # loops through all children(widgets)
+        i.destroy()
 
 
 startup()
