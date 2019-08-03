@@ -1,9 +1,11 @@
 #!/usr/bin/python3
 from tkinter import *
-from tkinter import messagebox
+from tkinter import messagebox, filedialog
 from PIL import Image, ImageTk
 import webbrowser
 import sys
+import os
+from cryptography.fernet import Fernet
 # from pillow import Image, ImageTk
 
 t = Tk()  # where m is the name of the main window object
@@ -109,20 +111,51 @@ def loginpage():
     E1.pack()
     label2.pack()
     E2.pack()
+    # remember me checkboc
+    remember = IntVar()
+    rememberCheck = Checkbutton(
+        t, text="  Remeber me", variable=remember, font=("arial", 10))  # 0=off 1=on
+    rememberCheck.pack()
     spacer.pack()
 
     # Button to quit the tool
     button2 = Button(t, text='Quit The Tool',
                      width=20, bd=3, command=sys.exit)
-    button1 = Button(t, text='Enter', width=20, bd=3,
-                     command=lambda: checkLogin(E1, E2))
+    button1 = Button(t, text='Login in', width=20, bd=3,
+                     command=lambda: checkLogin(E1, E2, remember.get()))
+
     button1.pack()
     button2.pack()
     bottomDecalBar()
+    # check if rememberMe file is there
+    if os.path.exists("rememberMe.artem"):
+        print("Found rememberMe.artem")
+        with open("rememberMe.artem", "rb") as file:
+            # marks the rememberMe checkbox
+            rememberCheck.select()
+            data = file.read()
+            file.close()
+            # converts byte backinto a string for split()
+            data = data.decode("utf-8")
+            data = data.split("danisgay")
+            key = data[0].encode("utf-8")  # gets the key stored in file
+            fernet = Fernet(key)
+            encrypted = fernet.decrypt(data[1].encode("utf-8"))
+            # print("Encrypted data:"+encrypted.decode("utf-8"))
+            encrypted = encrypted.split()
+            E1.insert(0, encrypted[0])
+            E2.insert(0, encrypted[1])
+            E1.config(bg="#f8f983")
+            E2.config(bg="#f8f983")
+    else:
+        # unmarks the checkbox
+        rememberCheck.deselect()
+        print("Cant find rememberMe file")
+
     t.mainloop()
 
 
-def checkLogin(userInput, passInput):  # prevents invalid inputs
+def checkLogin(userInput, passInput, storeUserandPass):  # prevents invalid inputs
     if userInput.get() == "" or passInput.get() == "":
         messagebox.showerror(
             "Invalid Input", "you entered nothing\nPlease try again")
@@ -133,18 +166,77 @@ def checkLogin(userInput, passInput):  # prevents invalid inputs
         messagebox.showerror(
             "Detected @ symbol", "Please enter only the username \nwithout @gmail.com")
     else:
+        # print("Variavle :"+str(storeUserandPass))
+        if storeUserandPass == 1:
+            # stores new info into system
+            key = Fernet.generate_key()
+            fernet = Fernet(key)
+            info = userInput.get()+" "+passInput.get()
+            encryptedData = fernet.encrypt(info.encode("utf-8"))
+            with open("rememberMe.artem", 'wb') as f:
+                f.write(key)
+                f.write("danisgay".encode("utf-8"))
+                f.write(encryptedData)
+                f.close()
+                print("Created encrpted file name: remeberMe.artem")
+
+            # with open("rememberMe.artem", "wb") as file:
+            #     info=userInput.get()+" "+passInput.get()
+            #     file.write(info.encode('utf-8'))# converts to byte
+            #     print("Saved file as rememberMe.artem")
+            #     file.close()
+            # with open("rememberMe.artem","rb") as read:
+            #     info=read.read()
+            #     print(info.decode('utf-8'))#converts back to string
         clearScreen()
         homepage()
 
 # } login page stuff
 
 
+def selectRecipentFile():
+
+    t.filename = filedialog.askopenfilename(
+        initialdir="~/Downloads", title="Select txt file...", filetypes=(("Text Files", "*.txt"), ("all files", "*.*")))
+    return t.filename
+def get_file_attachment():
+    t.filename = filedialog.askopenfilename(
+        initialdir="~/Downloads", title="Select File", filetypes=(("PDF files","*.pdf"),("all files", "*.*")))
+    return t.filename
+
+
 def homepage():
+    t.geometry("700x600")
     topDecalBar()
     setTopBarMenus()
     # homepage widgets go here
-    title = Label(t, text="Newsletter", font=("arial", 20, "bold"))
+    title = Label(t, text="Mail (Under development)",
+                  font=("arial", 12, "bold"))
+    section1 = LabelFrame(t, text="Send To")
+    send1text = Label(
+        section1, text="1) Emails in file:", font=("arial", 10))
+    send2text = Label(
+        section1, text="2) Artem Subscribers\n\tPassword   :", font=("arial", 10))
+    selectrecipentButton = Button(section1, text="Upload file", relief=GROOVE, font=(
+        "arial", 10), command=selectRecipentFile, bd=3)
+    recipent = Entry(section1, bd=5, relief=GROOVE)
+    section2 = LabelFrame(t, text="Subject")
+    section3 = LabelFrame(t, text="Files")
+    subjectInput = Entry(section2, relief=GROOVE, bd=5)
+    fileAttachments=Button(section3,text="Upload file",font=("arial", 10))
+    selectFileButton = Button(section1, text="Upload file", relief=GROOVE, font=(
+        "arial", 10), command=get_file_attachment, bd=3)
     title.pack(side=TOP)
+    section1.pack(fill=X,)
+    send1text.grid(row=0, column=0)
+    selectFileButton.grid(row=0, column=1)
+    send2text.grid(row=1,column=0)
+    recipent.grid(row=1, column=1)
+    section2.pack(fill=X)
+    subjectInput.pack()
+    section3.pack(fill=X)
+    fileAttachments.pack()
+
     bottomDecalBar()  # this stay at bottom
 
 
