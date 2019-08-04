@@ -9,6 +9,7 @@ from cryptography.fernet import Fernet
 # from pillow import Image, ImageTk
 
 t = Tk()  # where m is the name of the main window object
+t.configure(background='white')
 
 # theme Decal functions here {
 
