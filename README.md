@@ -10,6 +10,8 @@
 
 <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/artemnexgenlogo.png" alt="artemnexgen" width="160" height="70">
 
+Artem NexGen is an international network of high-achieving youth pursuing professional roles. Our organization provides business content and networking abilities, as well as aspiring members from our community with a greater level of raw exposure to a professional work-like setting. Additionally, Artem NexGen provides a platform for the most aspiring youth leaders to be mentored and to meet seasoned professionals that directly practice in their sectors of interest.
+
 <img src="https://github.com/Lin8x/artem-mail/blob/master/artem-mail/topbar.jpg" width="100%" height="5">
 
 ## <p align="center"> <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/requirementslogo.png" alt="requirements"> &nbsp; Requirements &nbsp; <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/requirementslogo.png" alt="requirements" width="20" height="20"> </p>
