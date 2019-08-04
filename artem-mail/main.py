@@ -220,7 +220,7 @@ def homepage():
     topDecalBar()
     setTopBarMenus()
     # homepage widgets go here
-    andlogo()
+    addlogo()
     
     title = Label(t, text="Mail (Under Development)",
                   font=("arial", 12, "bold"))
