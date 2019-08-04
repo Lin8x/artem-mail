@@ -4,7 +4,7 @@
 <img src="https://github.com/Lin8x/artem-mail/blob/master/artem-mail/artemlogo.png">
 </p>
 
-<img src="https://github.com/Lin8x/artem-mail/blob/master/artem-mail/topbar.jpg" width="100%" height="25">
+------------------------------------------------------------------------
 
 ## <p align="center"> <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/artem-mail/artemalogo.png" alt="googleot" width="20" height="20"> &nbsp; About Artem &nbsp; <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/artem-mail/artemalogo.png" alt="googleot" width="20" height="20"> </p>
 
