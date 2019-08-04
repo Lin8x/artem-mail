@@ -45,6 +45,7 @@ def addHelpMenu(tkobject):
                          command=lambda: opengithub(1))
     return helpmenu
 
+#this brings in artem logo image
 def addlogo():
     # logo here
     topDecalBar()
@@ -174,7 +175,7 @@ def checkLogin(userInput, passInput, storeUserandPass):  # prevents invalid inpu
             "Invalid Input", "You have reached the max character threshold\nPlease try again")
     elif userInput.get().find("@") != -1:
         messagebox.showerror(
-            "Detected @ symbol", "Please enter only the username \nwithout @gmail.com")
+            "Detected @ symbol", "Please enter only the username \nwithout @company.com")
     else:
         # print("Variavle :"+str(storeUserandPass))
         if storeUserandPass == 1:
@@ -188,7 +189,7 @@ def checkLogin(userInput, passInput, storeUserandPass):  # prevents invalid inpu
                 f.write("passwordprotected".encode("utf-8"))
                 f.write(encryptedData)
                 f.close()
-                print("Created encrpted file name: remeberMe.artem")
+                print("Created encrpted file name: rememberMe.artem")
 
             # with open("rememberMe.artem", "wb") as file:
             #     info=userInput.get()+" "+passInput.get()
