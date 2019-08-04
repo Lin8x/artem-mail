@@ -6,7 +6,7 @@
 
 <img src="https://github.com/Lin8x/artem-mail/blob/master/artem-mail/topbar.jpg" width="100%" height="5">
 
-## <p align="center"> <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/artem-mail/artemalogo.png" alt="googleot" width="20" height="20"> &nbsp; About Artem &nbsp; <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/artem-mail/artemalogo.png" alt="googleot" width="20" height="20"> </p>
+## <p align="center"> <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/artemalogo.png" alt="artem" width="20" height="20"> &nbsp; About Artem &nbsp; <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/artemalogo.png" alt="artem" width="20" height="20"> </p>
 
 <img src="https://github.com/Lin8x/artem-mail/blob/master/artem-mail/topbar.jpg" width="100%" height="5">
 
@@ -14,7 +14,7 @@
 
 <img src="https://github.com/Lin8x/artem-mail/blob/master/artem-mail/topbar.jpg" width="100%" height="5">
 
-## <p align="center"> ![download logo](https://i.ibb.co/fXV1fGD/download.png") &nbsp; How to Install &nbsp; ![download logo](https://i.ibb.co/fXV1fGD/download.png") </p>
+## <p align="center"> ![download logo](https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/howtoinstallimage.png) &nbsp; How to Install &nbsp; ![download logo](https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/howtoinstallimage.png) </p>
 
 1. Download manually from the Github page.
 ###### Or
@@ -23,6 +23,6 @@
 
 <img src="https://github.com/Lin8x/artem-mail/blob/master/artem-mail/topbar.jpg" width="100%" height="5">
 
-## <p align="center"> <img src="https://image.flaticon.com/icons/png/512/59/59108.png" alt="googleot" width="20" height="20"> &nbsp; How to Run &nbsp; <img src="https://image.flaticon.com/icons/png/512/59/59108.png" alt="googleot" width="20" height="20"> </p>
+## <p align="center"> <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/howtorunimage.png" alt="running logo" width="20" height="20"> &nbsp; How to Run &nbsp; <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/howtorunimage.png" alt="running logo" width="20" height="20"> </p>
 
 <img src="https://github.com/Lin8x/artem-mail/blob/master/artem-mail/topbar.jpg" width="100%" height="5">
