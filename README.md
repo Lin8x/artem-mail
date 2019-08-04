@@ -8,7 +8,7 @@
 
 ## <p align="center"> <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/artemalogo.png" alt="artem" width="20" height="20"> &nbsp; About Artem &nbsp; <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/artemalogo.png" alt="artem" width="20" height="20"> </p>
 
-<p align="center"> <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/artemnexgenlogo.png" alt="artemnexgen"> </p>
+<img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/artemnexgenlogo.png" alt="artemnexgen" width="200" height="100">
 
 <img src="https://github.com/Lin8x/artem-mail/blob/master/artem-mail/topbar.jpg" width="100%" height="5">
 
