@@ -12,7 +12,7 @@
 
 <img src="https://github.com/Lin8x/artem-mail/blob/master/artem-mail/topbar.jpg" width="100%" height="5">
 
-## <p align="center"> <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/requirementslogo.png" alt="requirements" width="20" height="20"> &nbsp; Requirements &nbsp; <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/requirementslogo.png" alt="requirements" width="20" height="20"> </p>
+## <p align="center"> <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/requirementslogo.png" alt="requirements"> &nbsp; Requirements &nbsp; <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/requirementslogo.png" alt="requirements" width="20" height="20"> </p>
 
 <img src="https://github.com/Lin8x/artem-mail/blob/master/artem-mail/topbar.jpg" width="100%" height="5">
 
