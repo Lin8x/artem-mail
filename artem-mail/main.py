@@ -45,6 +45,15 @@ def addHelpMenu(tkobject):
                          command=lambda: opengithub(1))
     return helpmenu
 
+def addlogo():
+    # logo here
+    topDecalBar()
+    image = Image.open("artemlogo.png")  # u need PNG file to store image Alpha
+    image = image.resize((200, 100), Image.ANTIALIAS)
+    photo = ImageTk.PhotoImage(image)
+    label = Label(image=photo)
+    label.image = photo  # keep a reference!
+    label.pack()
 
 def setTopBarMenus():
     # A MenuButton is a part of top-down menu which stays on the window all the time.
@@ -55,9 +64,9 @@ def setTopBarMenus():
     filemenu = Menu(topmenu, tearoff=0)
     filemenu.add_command(label='New Email')
     # open template, read what info is needed, get info(messages,subject,files) and put in program
-    filemenu.add_command(label='Open template')
+    filemenu.add_command(label='Open Template')
     # store message/subject/name of files- into a txt file, file attachments will be in same directory as text file
-    filemenu.add_command(label='Save Email as template')
+    filemenu.add_command(label='Save Email as Template')
     # opens a file widget and allows user to specify which txt file to use in program
     filemenu.add_command(label='Open Email list File (txt file)')
     filemenu.add_separator()
@@ -100,10 +109,10 @@ def loginpage():
     # Everything below here is the buttons
 
     # Entry/Text Input
-    label1 = Label(t, text="Gmail Username")
+    label1 = Label(t, text="Email Username")
     E1 = Entry(t, bd=5, relief=GROOVE)
 
-    label2 = Label(t, text="Gmail Password")
+    label2 = Label(t, text="Email Password")
     # pasword shows up as * when typing
     E2 = Entry(t, bd=5, relief=GROOVE, show="*")
     # empty label as spacer between entry and buttons
@@ -138,7 +147,7 @@ def loginpage():
             file.close()
             # converts byte backinto a string for split()
             data = data.decode("utf-8")
-            data = data.split("danisgay")
+            data = data.split("passwordprotected")
             key = data[0].encode("utf-8")  # gets the key stored in file
             fernet = Fernet(key)
             encrypted = fernet.decrypt(data[1].encode("utf-8"))
@@ -159,10 +168,10 @@ def loginpage():
 def checkLogin(userInput, passInput, storeUserandPass):  # prevents invalid inputs
     if userInput.get() == "" or passInput.get() == "":
         messagebox.showerror(
-            "Invalid Input", "you entered nothing\nPlease try again")
+            "Invalid Input", "You entered nothing\nPlease try again")
     elif len(userInput.get()) > 30 or len(userInput.get()) > 30:
         messagebox.showerror(
-            "Invalid Input", "you have reached the max character threshold\nPlease try again")
+            "Invalid Input", "You have reached the max character threshold\nPlease try again")
     elif userInput.get().find("@") != -1:
         messagebox.showerror(
             "Detected @ symbol", "Please enter only the username \nwithout @gmail.com")
@@ -176,7 +185,7 @@ def checkLogin(userInput, passInput, storeUserandPass):  # prevents invalid inpu
             encryptedData = fernet.encrypt(info.encode("utf-8"))
             with open("rememberMe.artem", 'wb') as f:
                 f.write(key)
-                f.write("danisgay".encode("utf-8"))
+                f.write("passwordprotected".encode("utf-8"))
                 f.write(encryptedData)
                 f.close()
                 print("Created encrpted file name: remeberMe.artem")
@@ -211,22 +220,28 @@ def homepage():
     topDecalBar()
     setTopBarMenus()
     # homepage widgets go here
-    title = Label(t, text="Mail (Under development)",
+    andlogo()
+    
+    title = Label(t, text="Mail (Under Development)",
                   font=("arial", 12, "bold"))
+    
     section1 = LabelFrame(t, text="Send To")
     send1text = Label(
-        section1, text="1) Emails in file:", font=("arial", 10))
+        section1, text="1) Emails in File:", font=("arial", 10))
     send2text = Label(
         section1, text="2) Artem Subscribers\n\tPassword   :", font=("arial", 10))
-    selectrecipentButton = Button(section1, text="Upload file", relief=GROOVE, font=(
+    selectrecipentButton = Button(section1, text="Upload File", relief=GROOVE, font=(
         "arial", 10), command=selectRecipentFile, bd=3)
+    
     recipent = Entry(section1, bd=5, relief=GROOVE)
     section2 = LabelFrame(t, text="Subject")
     section3 = LabelFrame(t, text="Files")
+    
     subjectInput = Entry(section2, relief=GROOVE, bd=5)
-    fileAttachments=Button(section3,text="Upload file",font=("arial", 10))
-    selectFileButton = Button(section1, text="Upload file", relief=GROOVE, font=(
+    fileAttachments=Button(section3,text="Upload File",font=("arial", 10))
+    selectFileButton = Button(section1, text="Upload File", relief=GROOVE, font=(
         "arial", 10), command=get_file_attachment, bd=3)
+    
     title.pack(side=TOP)
     section1.pack(fill=X,)
     send1text.grid(row=0, column=0)
