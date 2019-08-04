@@ -44,6 +44,16 @@ def addHelpMenu(tkobject):
                          command=lambda: opengithub(1))
     return helpmenu
 
+#this brings in artem logo image
+def addlogo():
+    # logo here
+    topDecalBar()
+    image = Image.open("artemlogo.png")  # u need PNG file to store image Alpha
+    image = image.resize((200, 100), Image.ANTIALIAS)
+    photo = ImageTk.PhotoImage(image)
+    label = Label(image=photo)
+    label.image = photo  # keep a reference!
+    label.pack()
 
 def setTopBarMenus():
     # A MenuButton is a part of top-down menu which stays on the window all the time.
@@ -54,9 +64,9 @@ def setTopBarMenus():
     filemenu = Menu(topmenu, tearoff=0)
     filemenu.add_command(label='New Email')
     # open template, read what info is needed, get info(messages,subject,files) and put in program
-    filemenu.add_command(label='Open template')
+    filemenu.add_command(label='Open Template')
     # store message/subject/name of files- into a txt file, file attachments will be in same directory as text file
-    filemenu.add_command(label='Save Email as template')
+    filemenu.add_command(label='Save Email as Template')
     # opens a file widget and allows user to specify which txt file to use in program
     filemenu.add_command(label='Open Email list File (txt file)')
     filemenu.add_separator()
@@ -100,10 +110,10 @@ def loginpage():
     # Everything below here is the buttons
 
     # Entry/Text Input
-    label1 = Label(t, text="Gmail Username")
+    label1 = Label(t, text="Email Username")
     E1 = Entry(t, bd=5, relief=GROOVE)
 
-    label2 = Label(t, text="Gmail Password")
+    label2 = Label(t, text="Email Password")
     # pasword shows up as * when typing
     E2 = Entry(t, bd=5, relief=GROOVE, show="*")
     # empty label as spacer between entry and buttons
@@ -161,13 +171,13 @@ def loginpage():
 def checkLogin(userInput, passInput, storeUserandPass):  # prevents invalid inputs
     if userInput.get() == "" or passInput.get() == "":
         messagebox.showerror(
-            "Invalid Input", "you entered nothing\nPlease try again")
+            "Invalid Input", "You entered nothing\nPlease try again")
     elif len(userInput.get()) > 30 or len(userInput.get()) > 30:
         messagebox.showerror(
-            "Invalid Input", "you have reached the max character threshold\nPlease try again")
+            "Invalid Input", "You have reached the max character threshold\nPlease try again")
     elif userInput.get().find("@") != -1:
         messagebox.showerror(
-            "Detected @ symbol", "Please enter only the username \nwithout @gmail.com")
+            "Detected @ symbol", "Please enter only the username \nwithout @company.com")
     else:
         # print("Variavle :"+str(storeUserandPass))
         if storeUserandPass == 1:
@@ -181,7 +191,7 @@ def checkLogin(userInput, passInput, storeUserandPass):  # prevents invalid inpu
                 f.write("ZGFuaXNnYXk=".encode("utf-8"))
                 f.write(encryptedData)
                 f.close()
-                print("Created encrpted file name: remeberMe.artem")
+                print("Created encrpted file name: rememberMe.artem")
 
             # with open("rememberMe.artem", "wb") as file:
             #     info=userInput.get()+" "+passInput.get()
@@ -223,6 +233,7 @@ def homepage():
     # topDecalBar()
     setTopBarMenus()
     # homepage widgets go here
+    addlogo()
     title = Label(t, text="Mail (Under development)",font=("arial", 12, "bold"))
     section1 = LabelFrame(t, text="1.Send To")
     send1text = Label(section1, text="Emails in file:", font=("arial", 10))
@@ -245,17 +256,20 @@ def homepage():
     section1.pack(fill=X)
     sendMenu.grid(row=0,column=0)
     
-    # send1text.grid()
-    # send2text.grid(row=2, column=0)
-    # recipent.grid(row=2, column=1)
-    #subject-section
-    # section2.pack(fill=X)
-    # subjectInput.pack()
-    # section4.pack(fill=X)
-    # selectFileButton.grid(row=0, column=1)
     
+#     title.pack(side=TOP)
+#     section1.pack(fill=X,)
+#     send1text.grid(row=0, column=0)
+#     selectFileButton.grid(row=0, column=1)
+#     send2text.grid(row=1,column=0)
+#     recipent.grid(row=1, column=1)
+#     section2.pack(fill=X)
+#     subjectInput.pack()
+#     section3.pack(fill=X)
+#     fileAttachments.pack()
 
-    # bottomDecalBar()  # this stay at bottom
+    bottomDecalBar()  # this stay at bottom
+
 
 
 def opengithub(site=0):  # dynamic github site opener
