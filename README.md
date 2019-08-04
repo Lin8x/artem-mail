@@ -1,5 +1,7 @@
 <img src="https://github.com/Lin8x/artem-mail/blob/master/artem-mail/topbar.jpg" width="100%" height="25">
 
+------------------------------------------------------------------------
+
 <p align="center">
 <img src="https://github.com/Lin8x/artem-mail/blob/master/artem-mail/artemlogo.png">
 </p>
@@ -20,5 +22,7 @@
 ###### Or
 2. Type in your terminal:
 `git clone https://www.github.com/lin8x/googleot`
+
+------------------------------------------------------------------------
 
 <img src="https://github.com/Lin8x/artem-mail/blob/master/artem-mail/topbar.jpg" width="100%" height="25">
