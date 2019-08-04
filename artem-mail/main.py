@@ -9,7 +9,6 @@ from cryptography.fernet import Fernet
 # from pillow import Image, ImageTk
 
 t = Tk()  # where m is the name of the main window object
-t.configure(background='white')
 
 # theme Decal functions here {
 
@@ -91,6 +90,7 @@ def setTopBarMenus():
 
 
 def loginpage():
+    t.geometry("500x400")  # Size of window
     clearScreen()
     menu = Menu(t)
     # help top menu bar for login screen
@@ -148,7 +148,7 @@ def loginpage():
             file.close()
             # converts byte backinto a string for split()
             data = data.decode("utf-8")
-            data = data.split("passwordprotected")
+            data = data.split("ZGFuaXNnYXk=")
             key = data[0].encode("utf-8")  # gets the key stored in file
             fernet = Fernet(key)
             encrypted = fernet.decrypt(data[1].encode("utf-8"))
@@ -161,6 +161,8 @@ def loginpage():
     else:
         # unmarks the checkbox
         rememberCheck.deselect()
+        E1.config(bg="white")
+        E2.config(bg="white")
         print("Cant find rememberMe file")
 
     t.mainloop()
@@ -186,7 +188,7 @@ def checkLogin(userInput, passInput, storeUserandPass):  # prevents invalid inpu
             encryptedData = fernet.encrypt(info.encode("utf-8"))
             with open("rememberMe.artem", 'wb') as f:
                 f.write(key)
-                f.write("passwordprotected".encode("utf-8"))
+                f.write("ZGFuaXNnYXk=".encode("utf-8"))
                 f.write(encryptedData)
                 f.close()
                 print("Created encrpted file name: rememberMe.artem")
@@ -208,53 +210,66 @@ def checkLogin(userInput, passInput, storeUserandPass):  # prevents invalid inpu
 def selectRecipentFile():
 
     t.filename = filedialog.askopenfilename(
-        initialdir="~/Downloads", title="Select txt file...", filetypes=(("Text Files", "*.txt"), ("all files", "*.*")))
-    return t.filename
-def get_file_attachment():
-    t.filename = filedialog.askopenfilename(
-        initialdir="~/Downloads", title="Select File", filetypes=(("PDF files","*.pdf"),("all files", "*.*")))
+        initialdir="~/", title="Select txt file...", filetypes=(("Text Files", "*.txt"), ("all files", "*.*")))
+    print(t.filename)
     return t.filename
 
+
+def get_file_attachment():
+    t.filename = filedialog.askopenfilename(
+        initialdir="~/", title="Select File", filetypes=(("PDF files", "*.pdf"), ("all files", "*.*")))
+        
+    return t.filename
+
+def sentTo_section(section,makeMeGone):
+    makeMeGone.destroy()
+    selectrecipentButton = Button(section, text="Upload file", relief=GROOVE, font=("arial", 10), command=selectRecipentFile, bd=3)
+    text=Label(section,text="Upload a txt file :",font=("arial", 10))
+    text.grid(row=0,column=0,columnspan=2)
+    selectrecipentButton.grid(row=0,column=1)
 
 def homepage():
     t.geometry("700x600")
-    topDecalBar()
+    # topDecalBar()
     setTopBarMenus()
     # homepage widgets go here
     addlogo()
+    title = Label(t, text="Mail (Under development)",font=("arial", 12, "bold"))
+    section1 = LabelFrame(t, text="1.Send To")
+    send1text = Label(section1, text="Emails in file:", font=("arial", 10))
+    send2text = Label(section1, text="Artem SubscribersPassword:", font=("arial", 10))
+    sendMenu=Menubutton(section1,text="Send Options",relief=GROOVE)
+    sendMenu.menu=Menu(sendMenu,tearoff=0)
+    sendMenu["menu"]=sendMenu.menu
+    sendMenu.menu.add_command(label="Emails in file",command=lambda: sentTo_section(section1,sendMenu))
     
-    title = Label(t, text="Mail (Under Development)",
-                  font=("arial", 12, "bold"))
+    recipent = Entry(section1, bd=2)
+    section2 = LabelFrame(t, text="2.Subject")
+    section3=LabelFrame(t,text="3.Message")
+    section4 = LabelFrame(t, text="4.Files")
+    subjectInput = Entry(section2, bd=2)
+    selectFileButton = Button(section4, text="Upload file", relief=GROOVE, font=("arial", 10), command=get_file_attachment, bd=3)
+
+
+    title.pack()
+    # Send to -section
+    section1.pack(fill=X)
+    sendMenu.grid(row=0,column=0)
     
-    section1 = LabelFrame(t, text="Send To")
-    send1text = Label(
-        section1, text="1) Emails in File:", font=("arial", 10))
-    send2text = Label(
-        section1, text="2) Artem Subscribers\n\tPassword   :", font=("arial", 10))
-    selectrecipentButton = Button(section1, text="Upload File", relief=GROOVE, font=(
-        "arial", 10), command=selectRecipentFile, bd=3)
     
-    recipent = Entry(section1, bd=5, relief=GROOVE)
-    section2 = LabelFrame(t, text="Subject")
-    section3 = LabelFrame(t, text="Files")
-    
-    subjectInput = Entry(section2, relief=GROOVE, bd=5)
-    fileAttachments=Button(section3,text="Upload File",font=("arial", 10))
-    selectFileButton = Button(section1, text="Upload File", relief=GROOVE, font=(
-        "arial", 10), command=get_file_attachment, bd=3)
-    
-    title.pack(side=TOP)
-    section1.pack(fill=X,)
-    send1text.grid(row=0, column=0)
-    selectFileButton.grid(row=0, column=1)
-    send2text.grid(row=1,column=0)
-    recipent.grid(row=1, column=1)
-    section2.pack(fill=X)
-    subjectInput.pack()
-    section3.pack(fill=X)
-    fileAttachments.pack()
+#     title.pack(side=TOP)
+#     section1.pack(fill=X,)
+#     send1text.grid(row=0, column=0)
+#     selectFileButton.grid(row=0, column=1)
+#     send2text.grid(row=1,column=0)
+#     recipent.grid(row=1, column=1)
+#     section2.pack(fill=X)
+#     subjectInput.pack()
+#     section3.pack(fill=X)
+#     fileAttachments.pack()
 
     bottomDecalBar()  # this stay at bottom
+
 
 
 def opengithub(site=0):  # dynamic github site opener
@@ -274,14 +289,13 @@ def opengithub(site=0):  # dynamic github site opener
 
 def startup():
     t.title("Artem Mail Tool")  # title of the tool
-    t.geometry("500x400")  # Size of window
     TITLE_FONT = ("Helvetica", 18, "bold")  # The font of words
 
     # A frane is a rectangular region on the screen
     # frame = Frame(t)
     # frame.pack()
-    bottomframe = Frame(t)
-    bottomframe.pack(side=BOTTOM)
+    # bottomframe = Frame(t)
+    # bottomframe.pack(side=BOTTOM)
 
     # A Canvas is used to draw pictures and other complex layout like graphics, text and widgets.
     # c = Canvas(t, width=0, height=0)
