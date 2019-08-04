@@ -31,11 +31,20 @@ def bottomDecalBar():
     label.image = photo  # keep a reference!
     label.pack(side=BOTTOM, fill=X)
 
-
+def artem(site=0):
+    # 0= home git page
+    # 1= report issue site
+    # 2= wiki page
+    url = "https://www.artemleaders.com/"
+    if site == 1:
+        url += "about.html"
+    webbrowser.open(url, new=2, autoraise=True)
+    
 def addHelpMenu(tkobject):
     '''returns a Menu object'''
     helpmenu = Menu(tkobject, tearoff=0)
-    helpmenu.add_command(label='About / Github Page', command=opengithub)
+    helpmenu.add_command(label='About', command=artem(1))
+    helpmenu.add_command(label='Github Page', command=opengithub)
     # point to github wiki page
     helpmenu.add_command(label='Tool Documentation',
                          command=lambda: opengithub(2))
