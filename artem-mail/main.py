@@ -6,9 +6,11 @@ import webbrowser
 import sys
 import os
 from cryptography.fernet import Fernet
+
 # from pillow import Image, ImageTk
 
 t = Tk()  # where m is the name of the main window object
+
 
 # theme Decal functions here {
 
@@ -31,29 +33,22 @@ def bottomDecalBar():
     label.image = photo  # keep a reference!
     label.pack(side=BOTTOM, fill=X)
 
-def artem(site=0):
-    # 0= home git page
-    # 1= report issue site
-    # 2= wiki page
-    url = "https://www.artemleaders.com/"
-    if site == 1:
-        url += "about.html"
-    webbrowser.open(url, new=2, autoraise=True)
-    
+
 def addHelpMenu(tkobject):
     '''returns a Menu object'''
     helpmenu = Menu(tkobject, tearoff=0)
-    helpmenu.add_command(label='About', command=artem(1))
-    helpmenu.add_command(label='Github Page', command=opengithub)
+    helpmenu.add_command(label='About Artem', command=lambda: openSite(3))
+    helpmenu.add_command(label='Github Page', command=openSite)
     # point to github wiki page
     helpmenu.add_command(label='Tool Documentation',
-                         command=lambda: opengithub(2))
+                         command=lambda: openSite(2))
     # point to github issues page
     helpmenu.add_command(label='Report Bugs/Glitches/Issues',
-                         command=lambda: opengithub(1))
+                         command=lambda: openSite(1))
     return helpmenu
 
-#this brings in artem logo image
+
+# this brings in artem logo image
 def addlogo():
     # logo here
     topDecalBar()
@@ -63,6 +58,7 @@ def addlogo():
     label = Label(image=photo)
     label.image = photo  # keep a reference!
     label.pack()
+
 
 def setTopBarMenus():
     # A MenuButton is a part of top-down menu which stays on the window all the time.
@@ -93,6 +89,7 @@ def setTopBarMenus():
     topmenu.add_cascade(label='Help', menu=helpmenu)
     # applys the top menu bar to window
     t.config(menu=topmenu)
+
 
 # } Decal functions
 # login page stuff here {
@@ -133,16 +130,13 @@ def loginpage():
     E2.pack()
     # remember me checkboc
     remember = IntVar()
-    rememberCheck = Checkbutton(
-        t, text="  Remeber me", variable=remember, font=("arial", 10))  # 0=off 1=on
+    rememberCheck = Checkbutton(t, text="  Remeber me", variable=remember, font=("arial", 10))  # 0=off 1=on
     rememberCheck.pack()
     spacer.pack()
 
     # Button to quit the tool
-    button2 = Button(t, text='Quit The Tool',
-                     width=20, bd=3, command=sys.exit)
-    button1 = Button(t, text='Login in', width=20, bd=3,
-                     command=lambda: checkLogin(E1, E2, remember.get()))
+    button2 = Button(t, text='Quit The Tool', width=20, bd=3, command=sys.exit)
+    button1 = Button(t, text='Login in', width=20, bd=3, command=lambda: checkLogin(E1, E2, remember.get()))
 
     button1.pack()
     button2.pack()
@@ -193,7 +187,7 @@ def checkLogin(userInput, passInput, storeUserandPass):  # prevents invalid inpu
             # stores new info into system
             key = Fernet.generate_key()
             fernet = Fernet(key)
-            info = userInput.get()+" "+passInput.get()
+            info = userInput.get() + " " + passInput.get()
             encryptedData = fernet.encrypt(info.encode("utf-8"))
             with open("rememberMe.artem", 'wb') as f:
                 f.write(key)
@@ -213,11 +207,11 @@ def checkLogin(userInput, passInput, storeUserandPass):  # prevents invalid inpu
         clearScreen()
         homepage()
 
+
 # } login page stuff
 
 
 def selectRecipentFile():
-
     t.filename = filedialog.askopenfilename(
         initialdir="~/", title="Select txt file...", filetypes=(("Text Files", "*.txt"), ("all files", "*.*")))
     print(t.filename)
@@ -227,15 +221,18 @@ def selectRecipentFile():
 def get_file_attachment():
     t.filename = filedialog.askopenfilename(
         initialdir="~/", title="Select File", filetypes=(("PDF files", "*.pdf"), ("all files", "*.*")))
-        
+
     return t.filename
 
-def sentTo_section(section,makeMeGone):
+
+def sentTo_section(section, makeMeGone):
     makeMeGone.destroy()
-    selectrecipentButton = Button(section, text="Upload file", relief=GROOVE, font=("arial", 10), command=selectRecipentFile, bd=3)
-    text=Label(section,text="Upload a txt file :",font=("arial", 10))
-    text.grid(row=0,column=0,columnspan=2)
-    selectrecipentButton.grid(row=0,column=1)
+    selectrecipentButton = Button(section, text="Upload file", relief=GROOVE, font=("arial", 10),
+                                  command=selectRecipentFile, bd=3)
+    text = Label(section, text="Upload a txt file :", font=("arial", 10))
+    text.grid(row=0, column=0, columnspan=2)
+    selectrecipentButton.grid(row=0, column=3)
+
 
 def homepage():
     t.geometry("700x600")
@@ -243,53 +240,54 @@ def homepage():
     setTopBarMenus()
     # homepage widgets go here
     addlogo()
-    title = Label(t, text="Mail (Under development)",font=("arial", 12, "bold"))
+    title = Label(t, text="Mail (Under development)", font=("arial", 12, "bold"))
     section1 = LabelFrame(t, text="1.Send To")
     send1text = Label(section1, text="Emails in file:", font=("arial", 10))
     send2text = Label(section1, text="Artem SubscribersPassword:", font=("arial", 10))
-    sendMenu=Menubutton(section1,text="Send Options",relief=GROOVE)
-    sendMenu.menu=Menu(sendMenu,tearoff=0)
-    sendMenu["menu"]=sendMenu.menu
-    sendMenu.menu.add_command(label="Emails in file",command=lambda: sentTo_section(section1,sendMenu))
-    
+    sendMenu = Menubutton(section1, text="Send Options", relief=GROOVE)
+    sendMenu.menu = Menu(sendMenu, tearoff=0)
+    sendMenu["menu"] = sendMenu.menu
+    sendMenu.menu.add_command(label="Emails in file", command=lambda: sentTo_section(section1, sendMenu))
+
     recipent = Entry(section1, bd=2)
     section2 = LabelFrame(t, text="2.Subject")
-    section3=LabelFrame(t,text="3.Message")
+    section3 = LabelFrame(t, text="3.Message")
     section4 = LabelFrame(t, text="4.Files")
     subjectInput = Entry(section2, bd=2)
-    selectFileButton = Button(section4, text="Upload file", relief=GROOVE, font=("arial", 10), command=get_file_attachment, bd=3)
-
+    selectFileButton = Button(section4, text="Upload file", relief=GROOVE, font=("arial", 10),
+                              command=get_file_attachment, bd=3)
 
     title.pack()
     # Send to -section
     section1.pack(fill=X)
-    sendMenu.grid(row=0,column=0)
-    
-    
-#     title.pack(side=TOP)
-#     section1.pack(fill=X,)
-#     send1text.grid(row=0, column=0)
-#     selectFileButton.grid(row=0, column=1)
-#     send2text.grid(row=1,column=0)
-#     recipent.grid(row=1, column=1)
-#     section2.pack(fill=X)
-#     subjectInput.pack()
-#     section3.pack(fill=X)
-#     fileAttachments.pack()
+    sendMenu.grid(row=0, column=0)
+
+    #     title.pack(side=TOP)
+    #     section1.pack(fill=X,)
+    #     send1text.grid(row=0, column=0)
+    #     selectFileButton.grid(row=0, column=1)
+    #     send2text.grid(row=1,column=0)
+    #     recipent.grid(row=1, column=1)
+    #     section2.pack(fill=X)
+    #     subjectInput.pack()
+    #     section3.pack(fill=X)
+    #     fileAttachments.pack()
 
     bottomDecalBar()  # this stay at bottom
 
 
-
-def opengithub(site=0):  # dynamic github site opener
+def openSite(site=0):  # dynamic github site opener
     # 0= home git page
     # 1= report issue site
     # 2= wiki page
+    # 3=about Artem site
     url = "https://github.com/Lin8x/artem-mail"
     if site == 1:
         url += "/issues"
     elif site == 2:
         url += "/wiki"
+    elif site == 3:
+        url = "https://www.artemleaders.com/about.html"
 
     # os.system("open https://github.com/Lin8x/artem-mail") # this only works for MAC
     # cross platform(new=2 opens a tab if webbroswer is already open)
