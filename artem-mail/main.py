@@ -225,42 +225,58 @@ def get_file_attachment():
     return t.filename
 
 
-def sentTo_section(section, makeMeGone):
+def sentTo_Menu(section, makeMeGone, option=0):
     makeMeGone.destroy()
-    selectrecipentButton = Button(section, text="Upload file", relief=GROOVE, font=("arial", 10),
-                                  command=selectRecipentFile, bd=3)
-    text = Label(section, text="Upload a txt file :", font=("arial", 10))
-    text.grid(row=0, column=0, columnspan=2)
-    selectrecipentButton.grid(row=0, column=3)
+    if option == 0:  # upload txt file
+        var = ""
+        selectrecipentButton = Button(section, text="Upload file", relief=GROOVE, font=("arial", 10),
+                                      command=selectRecipentFile, bd=3)
+        text = Label(section, text="Upload a txt file :", font=("arial", 10))
+        var = selectrecipentButton.get
+        fileLoc = Label(section, textveriable=var)
+        text.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
+        selectrecipentButton.grid(row=0, column=3, padx=10, pady=10)
+    else:  # enter all recipents
+
+        BIGemails = Text(section, height=4, width=80, font=("arial", 10))
+        scrll = Scrollbar(section, command=BIGemails.yview)
+        BIGemails.config(yscrollcommand=scrll.set)
+        BIGemails.insert("1.0", "# Seperate the emails with a comma (,)")
+        BIGemails.grid(row=0, pady=15, padx=10)
+        scrll.grid(row=0, column=81)
 
 
 def homepage():
     t.geometry("700x600")
-    # topDecalBar()
     setTopBarMenus()
     # homepage widgets go here
     addlogo()
     title = Label(t, text="Mail (Under development)", font=("arial", 12, "bold"))
     section1 = LabelFrame(t, text="1.Send To")
-    send1text = Label(section1, text="Emails in file:", font=("arial", 10))
-    send2text = Label(section1, text="Artem SubscribersPassword:", font=("arial", 10))
     sendMenu = Menubutton(section1, text="Send Options", relief=GROOVE)
     sendMenu.menu = Menu(sendMenu, tearoff=0)
     sendMenu["menu"] = sendMenu.menu
-    sendMenu.menu.add_command(label="Emails in file", command=lambda: sentTo_section(section1, sendMenu))
+    sendMenu.menu.add_command(label="Emails in file", command=lambda: sentTo_Menu(section1, sendMenu))
+    sendMenu.menu.add_command(label="Type all emails", command=lambda: sentTo_Menu(section1, sendMenu, option=1))
 
-    recipent = Entry(section1, bd=2)
     section2 = LabelFrame(t, text="2.Subject")
     section3 = LabelFrame(t, text="3.Message")
     section4 = LabelFrame(t, text="4.Files")
-    subjectInput = Entry(section2, bd=2)
+    subjectInput = Entry(section2, bd=2, width=95)
     selectFileButton = Button(section4, text="Upload file", relief=GROOVE, font=("arial", 10),
                               command=get_file_attachment, bd=3)
 
     title.pack()
     # Send to -section
     section1.pack(fill=X)
-    sendMenu.grid(row=0, column=0)
+    sendMenu.config(relief=RAISED)
+    sendMenu.grid(row=0, column=0, padx=10, pady=10)
+    # Subject-section
+    section2.pack(fill=X)
+    subjectInput.grid(sticky="WE", padx=10, pady=10)
+    # Message-section
+    section3.pack(fill=X)
+
 
     #     title.pack(side=TOP)
     #     section1.pack(fill=X,)
