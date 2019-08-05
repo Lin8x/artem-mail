@@ -232,8 +232,8 @@ def sentTo_Menu(section, makeMeGone, option=0):
         selectrecipentButton = Button(section, text="Upload file", relief=GROOVE, font=("arial", 10),
                                       command=selectRecipentFile, bd=3)
         text = Label(section, text="Upload a txt file :", font=("arial", 10))
-        var = selectrecipentButton.get
-        fileLoc = Label(section, textveriable=var)
+        # var = selectrecipentButton.get
+        fileLoc = Label(section, textvariable=var)
         text.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
         selectrecipentButton.grid(row=0, column=3, padx=10, pady=10)
     else:  # enter all recipents
