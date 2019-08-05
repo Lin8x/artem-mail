@@ -10,6 +10,8 @@ from cryptography.fernet import Fernet
 # from pillow import Image, ImageTk
 
 t = Tk()  # where m is the name of the main window object
+Recipient_fileUploadName = StringVar()
+Files_fileUploadName = []
 
 
 # theme Decal functions here {
@@ -214,28 +216,31 @@ def checkLogin(userInput, passInput, storeUserandPass):  # prevents invalid inpu
 def selectRecipentFile():
     t.filename = filedialog.askopenfilename(
         initialdir="~/", title="Select txt file...", filetypes=(("Text Files", "*.txt"), ("all files", "*.*")))
-    print(t.filename)
+    global Recipient_fileUploadName
+    Recipient_fileUploadName.set(t.filename)
+    # Recipient_fileUploadName = t.filename
+    print(Recipient_fileUploadName)
     return t.filename
 
 
 def get_file_attachment():
     t.filename = filedialog.askopenfilename(
         initialdir="~/", title="Select File", filetypes=(("PDF files", "*.pdf"), ("all files", "*.*")))
-
+    Files_fileUploadName.append(t.filename)
     return t.filename
 
 
 def sentTo_Menu(section, makeMeGone, option=0):
     makeMeGone.destroy()
     if option == 0:  # upload txt file
-        var = ""
         selectrecipentButton = Button(section, text="Upload file", relief=GROOVE, font=("arial", 10),
                                       command=selectRecipentFile, bd=3)
         text = Label(section, text="Upload a txt file :", font=("arial", 10))
         # var = selectrecipentButton.get
-        fileLoc = Label(section, textvariable=var)
+        fileLoc = Label(section, textvariable=Recipient_fileUploadName)  # os.path.basename(Recipient_fileUploadName)
         text.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
         selectrecipentButton.grid(row=0, column=3, padx=10, pady=10)
+        fileLoc.grid(row=0, column=5, padx=10, pady=10)
     else:  # enter all recipents
 
         BIGemails = Text(section, height=4, width=80, font=("arial", 10))
@@ -243,17 +248,16 @@ def sentTo_Menu(section, makeMeGone, option=0):
         BIGemails.config(yscrollcommand=scrll.set)
         BIGemails.insert("1.0", "# Seperate the emails with a comma (,)")
         BIGemails.grid(row=0, pady=15, padx=10)
-        scrll.grid(row=0, column=81)
+        scrll.grid(row=0, column=81, sticky="NS")
 
 
 def homepage():
-    t.geometry("700x600")
+    t.geometry("700x750")
     setTopBarMenus()
-    # homepage widgets go here
     addlogo()
-    title = Label(t, text="Mail (Under development)", font=("arial", 12, "bold"))
+    # title = Label(t, text="Mail (Under development)", font=("arial", 12, "bold"))
     section1 = LabelFrame(t, text="1.Send To")
-    sendMenu = Menubutton(section1, text="Send Options", relief=GROOVE)
+    sendMenu = Menubutton(section1, text="Select Option")
     sendMenu.menu = Menu(sendMenu, tearoff=0)
     sendMenu["menu"] = sendMenu.menu
     sendMenu.menu.add_command(label="Emails in file", command=lambda: sentTo_Menu(section1, sendMenu))
@@ -262,11 +266,14 @@ def homepage():
     section2 = LabelFrame(t, text="2.Subject")
     section3 = LabelFrame(t, text="3.Message")
     section4 = LabelFrame(t, text="4.Files")
-    subjectInput = Entry(section2, bd=2, width=95)
-    selectFileButton = Button(section4, text="Upload file", relief=GROOVE, font=("arial", 10),
-                              command=get_file_attachment, bd=3)
+    subjectInput = Entry(section2, bd=2, width=93)
 
-    title.pack()
+    messageTextBox = Text(section3, bd=2, width=60, height=15)
+    messageScroll = Scrollbar(section3, command=messageTextBox.yview, orient=VERTICAL, width=25, bg="green")
+    messageTextBox.config(yscrollcommand=messageScroll.set)
+    AddAttachments = Button(section4, text="Add Attachments", relief=GROOVE)
+
+    # title.pack()
     # Send to -section
     section1.pack(fill=X)
     sendMenu.config(relief=RAISED)
@@ -276,20 +283,41 @@ def homepage():
     subjectInput.grid(sticky="WE", padx=10, pady=10)
     # Message-section
     section3.pack(fill=X)
+    messageTextBox.grid(row=0, padx=10, pady=10, sticky="W")
+    messageScroll.grid(row=0, column=100, sticky="NS", rowspan=5, columnspan=3)
+    # files-section
+    section4.pack(fill=X)
+    AddAttachments.grid(row=0, column=0, pady=10, padx=10)
+    # End buttons
+    buttonContainer = Frame(t)
+    buttonContainer.pack()
+    # sendButton = Button(buttonContainer, text="Send Email", font=("arial", 10, "bold"), bd=3, relief=RIDGE,
+    #                     width=30, height=2, bg="#7228bd",fg="white")
+    # ClearButton = Button(buttonContainer, text="Restart", font=("arial", 10, "bold"), bd=3, relief=RIDGE,
+    #                      command=restartHome, width=30, height=2,fg="red")
 
+    image1 = Image.open("RestartButton.png")
+    image1 = image1.resize((100, 100), Image.ANTIALIAS)
+    RestartImage = ImageTk.PhotoImage(image1)
 
-    #     title.pack(side=TOP)
-    #     section1.pack(fill=X,)
-    #     send1text.grid(row=0, column=0)
-    #     selectFileButton.grid(row=0, column=1)
-    #     send2text.grid(row=1,column=0)
-    #     recipent.grid(row=1, column=1)
-    #     section2.pack(fill=X)
-    #     subjectInput.pack()
-    #     section3.pack(fill=X)
-    #     fileAttachments.pack()
+    image2 = Image.open("SendButton.png")
+    # SendImage = SendImage.resize((100, 100), Image.ANTIALIAS)
+    SendImage = ImageTk.PhotoImage(image2)
 
+    sendButton = Button(buttonContainer, image=SendImage, height=40, width=200)
+    restartButton = Button(buttonContainer, image=RestartImage, height=40, width=200, command=restartHome)
+
+    restartButton.grid(row=0, sticky=W, padx=10, pady=10)
+    sendButton.grid(row=0, column=1, sticky=E, padx=10, pady=10)
     bottomDecalBar()  # this stay at bottom
+
+
+def restartHome():
+    global Recipient_fileUploadName, Files_fileUploadName
+    Recipient_fileUploadName = StringVar()
+    Files_fileUploadName = []
+    clearScreen()
+    homepage()
 
 
 def openSite(site=0):  # dynamic github site opener
