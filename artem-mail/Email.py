@@ -99,9 +99,3 @@ def authenticate():
         #         input("Please press {ENTER} to continue... ")
     finally:
         return True
-
-
-#
-# login_to_email("nguyenminheric@yahoo.com", "Adaisbad100")
-login_to_email("123rex100@gmail.com", "asianhacker!00")
-sendEmail("123rex100@gmail.com", "subject", "Hello from python")
