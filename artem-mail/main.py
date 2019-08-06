@@ -6,9 +6,9 @@ import webbrowser
 import sys
 import os
 from cryptography.fernet import Fernet
+import emailsender
 
 # from pillow import Image, ImageTk
-
 t = Tk()  # where m is the name of the main window object
 Recipient_fileUploadName = StringVar()
 Files_fileUploadName = []
@@ -69,13 +69,12 @@ def setTopBarMenus():
 
     # file menu button
     filemenu = Menu(topmenu, tearoff=0)
-    filemenu.add_command(label='New Email')
+    filemenu.add_command(label='New Email', command=restartHome)
     # open template, read what info is needed, get info(messages,subject,files) and put in program
     filemenu.add_command(label='Open Template')
     # store message/subject/name of files- into a txt file, file attachments will be in same directory as text file
     filemenu.add_command(label='Save Email as Template')
     # opens a file widget and allows user to specify which txt file to use in program
-    filemenu.add_command(label='Open Email list File (txt file)')
     filemenu.add_separator()
     filemenu.add_command(label="Signout", command=loginpage)
     filemenu.add_command(label='Exit', command=sys.exit)
@@ -180,10 +179,8 @@ def checkLogin(userInput, passInput, storeUserandPass):  # prevents invalid inpu
     elif len(userInput.get()) > 30 or len(userInput.get()) > 30:
         messagebox.showerror(
             "Invalid Input", "You have reached the max character threshold\nPlease try again")
-    elif userInput.get().find("@") != -1:
-        messagebox.showerror(
-            "Detected @ symbol", "Please enter only the username \nwithout @company.com")
     else:
+        can_pass = emailsender.login_to_email(userInput.get(), passInput.get())
         # print("Variavle :"+str(storeUserandPass))
         if storeUserandPass == 1:
             # stores new info into system
@@ -206,13 +203,17 @@ def checkLogin(userInput, passInput, storeUserandPass):  # prevents invalid inpu
             # with open("rememberMe.artem","rb") as read:
             #     info=read.read()
             #     print(info.decode('utf-8'))#converts back to string
-        clearScreen()
-        homepage()
+        if can_pass:
+            homepage()
+        else:
+            messagebox.showerror(
+                "Incorrect Username or Password.", "If your username and password is correct but you are still getting this error\n Visit the troubleshooting page https://github.com/Lin8x/artem-mail/wiki")
+
 
 
 # } login page stuff
 
-
+# Main page stuff here {
 def selectRecipentFile():
     t.filename = filedialog.askopenfilename(
         initialdir="~/", title="Select txt file...", filetypes=(("Text Files", "*.txt"), ("all files", "*.*")))
@@ -253,6 +254,7 @@ def sentTo_Menu(section, makeMeGone, option=0):
 
 def homepage():
     t.geometry("700x750")
+    clearScreen()
     setTopBarMenus()
     addlogo()
     # title = Label(t, text="Mail (Under development)", font=("arial", 12, "bold"))
@@ -303,9 +305,10 @@ def homepage():
     image2 = Image.open("SendButton.png")
     # SendImage = SendImage.resize((100, 100), Image.ANTIALIAS)
     SendImage = ImageTk.PhotoImage(image2)
-
+    # WTF DAN HELP ME!!!!!!!!!!!! IMAGES FOR MY BUTTONS DONT WORK ***************************************************
     sendButton = Button(buttonContainer, image=SendImage, height=40, width=200)
     restartButton = Button(buttonContainer, image=RestartImage, height=40, width=200, command=restartHome)
+    sendButton.config(image=SendImage)
 
     restartButton.grid(row=0, sticky=W, padx=10, pady=10)
     sendButton.grid(row=0, column=1, sticky=E, padx=10, pady=10)
@@ -316,10 +319,10 @@ def restartHome():
     global Recipient_fileUploadName, Files_fileUploadName
     Recipient_fileUploadName = StringVar()
     Files_fileUploadName = []
-    clearScreen()
     homepage()
 
 
+# } main page
 def openSite(site=0):  # dynamic github site opener
     # 0= home git page
     # 1= report issue site
