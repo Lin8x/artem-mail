@@ -8,10 +8,11 @@ import os
 from cryptography.fernet import Fernet
 import emailsender
 
-# from pillow import Image, ImageTk
 t = Tk()  # where m is the name of the main window object
 Recipient_fileUploadName = StringVar()
 Files_fileUploadName = []
+
+recipient_Obj = Entry()  # reference entry or file data
 
 
 # theme Decal functions here {
@@ -118,11 +119,11 @@ def loginpage():
 
     # Entry/Text Input
     label1 = Label(t, text="Email Username")
-    E1 = Entry(t, bd=5, relief=GROOVE)
+    E1 = Entry(t, bd=3, relief=GROOVE, width=30)
 
     label2 = Label(t, text="Email Password")
     # pasword shows up as * when typing
-    E2 = Entry(t, bd=5, relief=GROOVE, show="*")
+    E2 = Entry(t, bd=3, relief=GROOVE, width=30, show="*")
     # empty label as spacer between entry and buttons
     spacer = Label(text=" ")
     label1.pack()
@@ -137,7 +138,7 @@ def loginpage():
 
     # Button to quit the tool
     button2 = Button(t, text='Quit The Tool', width=20, bd=3, command=sys.exit)
-    button1 = Button(t, text='Login in', width=20, bd=3, command=lambda: checkLogin(E1, E2, remember.get()))
+    button1 = Button(t, text='Login in', width=20, bd=3, command=lambda: checkLogin(E1, E2, remember.get(), button1))
 
     button1.pack()
     button2.pack()
@@ -172,7 +173,8 @@ def loginpage():
     t.mainloop()
 
 
-def checkLogin(userInput, passInput, storeUserandPass):  # prevents invalid inputs
+def checkLogin(userInput, passInput, storeUserandPass, button):  # prevents invalid inputs
+    button.config(text="Loading...")
     if userInput.get() == "" or passInput.get() == "":
         messagebox.showerror(
             "Invalid Input", "You entered nothing\nPlease try again")
@@ -206,9 +208,10 @@ def checkLogin(userInput, passInput, storeUserandPass):  # prevents invalid inpu
         if can_pass:
             homepage()
         else:
+            button.config(text="Login in")
             messagebox.showerror(
-                "Incorrect Username or Password.", "If your username and password is correct but you are still getting this error\n Visit the troubleshooting page https://github.com/Lin8x/artem-mail/wiki")
-
+                "Incorrect Username or Password.",
+                "If your username and password is correct but you are still getting this error\n Visit the troubleshooting page https://github.com/asian-code/artem-mail/wiki")
 
 
 # } login page stuff
@@ -221,14 +224,18 @@ def selectRecipentFile():
     Recipient_fileUploadName.set(t.filename)
     # Recipient_fileUploadName = t.filename
     print(Recipient_fileUploadName)
-    return t.filename
 
 
 def get_file_attachment():
     t.filename = filedialog.askopenfilename(
         initialdir="~/", title="Select File", filetypes=(("PDF files", "*.pdf"), ("all files", "*.*")))
     Files_fileUploadName.append(t.filename)
-    return t.filename
+    print(Files_fileUploadName)
+
+
+def helpMessage():
+    messagebox.showinfo("Help",
+                        "Format- (Name);(Email)\n(Name) is optional\n\nExample:\nJohn Smith;johnny@gmail.com\n;hellokitty@gmail.com\nAlex Gomez;trollmaster@yahoo.com")
 
 
 def sentTo_Menu(section, makeMeGone, option=0):
@@ -247,33 +254,51 @@ def sentTo_Menu(section, makeMeGone, option=0):
         BIGemails = Text(section, height=4, width=80, font=("arial", 10))
         scrll = Scrollbar(section, command=BIGemails.yview)
         BIGemails.config(yscrollcommand=scrll.set)
-        BIGemails.insert("1.0", "# Seperate the emails with a comma (,)")
+        # BIGemails.insert("1.0",
+        #                  "# Format:(Name);(Email) Example-John Smith ; johnny@gmail.com\n#(Name) is optional \tExample-;johnny@gmail.com")
         BIGemails.grid(row=0, pady=15, padx=10)
         scrll.grid(row=0, column=81, sticky="NS")
+        questionButton = Button(section, text="?", font=("arial", 15, "bold"), relief=GROOVE, bd=3, width=2,
+                                command=helpMessage)
+        questionButton.grid(row=0, column=100, padx=3, pady=1)
+
+
+def restartHome():
+    global Recipient_fileUploadName, Files_fileUploadName
+    Recipient_fileUploadName = StringVar()
+    Files_fileUploadName = []
+    homepage()
+
+
+def sendMessage():
+    emailsender.sendEmail("danisgay@gmail.com", "amazing subject", "This is a message lol")
 
 
 def homepage():
-    t.geometry("700x750")
+    t.geometry("700x800")
     clearScreen()
     setTopBarMenus()
     addlogo()
     # title = Label(t, text="Mail (Under development)", font=("arial", 12, "bold"))
+    megaScrollbar = Scrollbar(t, command=t.yview)
+    t.config(yscrollcommand=megaScrollbar.set)
+    megaScrollbar.pack(side=RIGHT, fill=Y)
     section1 = LabelFrame(t, text="1.Send To")
     sendMenu = Menubutton(section1, text="Select Option")
     sendMenu.menu = Menu(sendMenu, tearoff=0)
     sendMenu["menu"] = sendMenu.menu
-    sendMenu.menu.add_command(label="Emails in file", command=lambda: sentTo_Menu(section1, sendMenu))
-    sendMenu.menu.add_command(label="Type all emails", command=lambda: sentTo_Menu(section1, sendMenu, option=1))
+    sendMenu.menu.add_command(label="1. Emails in file", command=lambda: sentTo_Menu(section1, sendMenu))
+    sendMenu.menu.add_command(label="2. Enter recipients", command=lambda: sentTo_Menu(section1, sendMenu, option=1))
 
     section2 = LabelFrame(t, text="2.Subject")
     section3 = LabelFrame(t, text="3.Message")
     section4 = LabelFrame(t, text="4.Files")
-    subjectInput = Entry(section2, bd=2, width=93)
+    subjectInput = Entry(section2, bd=1, width=93)
 
-    messageTextBox = Text(section3, bd=2, width=60, height=15)
+    messageTextBox = Text(section3, bd=1, width=60, height=15)
     messageScroll = Scrollbar(section3, command=messageTextBox.yview, orient=VERTICAL, width=25, bg="green")
     messageTextBox.config(yscrollcommand=messageScroll.set)
-    AddAttachments = Button(section4, text="Add Attachments", relief=GROOVE)
+    AddAttachments = Button(section4, text="Add Attachments", relief=GROOVE, command=get_file_attachment)
 
     # title.pack()
     # Send to -section
@@ -293,36 +318,28 @@ def homepage():
     # End buttons
     buttonContainer = Frame(t)
     buttonContainer.pack()
-    # sendButton = Button(buttonContainer, text="Send Email", font=("arial", 10, "bold"), bd=3, relief=RIDGE,
-    #                     width=30, height=2, bg="#7228bd",fg="white")
-    # ClearButton = Button(buttonContainer, text="Restart", font=("arial", 10, "bold"), bd=3, relief=RIDGE,
-    #                      command=restartHome, width=30, height=2,fg="red")
+    sendButton = Button(buttonContainer, text="Send Email", font=("arial", 10, "bold"), bd=3, relief=RIDGE,
+                        width=30, height=2, bg="#7228bd", fg="white", command=lambda: sendMessage())
+    restartButton = Button(buttonContainer, text="Restart", font=("arial", 10, "bold"), bd=3, relief=RIDGE,
+                           command=restartHome, width=30, height=2, fg="red")
 
-    image1 = Image.open("RestartButton.png")
-    image1 = image1.resize((100, 100), Image.ANTIALIAS)
-    RestartImage = ImageTk.PhotoImage(image1)
-
-    image2 = Image.open("SendButton.png")
+    # image1 = Image.open("RestartButton.png")
+    # image1 = image1.resize((100, 100), Image.ANTIALIAS)
+    # RestartImage = ImageTk.PhotoImage(image1)
+    # image2 = Image.open("SendButton.png")
     # SendImage = SendImage.resize((100, 100), Image.ANTIALIAS)
-    SendImage = ImageTk.PhotoImage(image2)
+    # SendImage = ImageTk.PhotoImage(image2)
     # WTF DAN HELP ME!!!!!!!!!!!! IMAGES FOR MY BUTTONS DONT WORK ***************************************************
-    sendButton = Button(buttonContainer, image=SendImage, height=40, width=200)
-    restartButton = Button(buttonContainer, image=RestartImage, height=40, width=200, command=restartHome)
-    sendButton.config(image=SendImage)
+    # sendButton = Button(buttonContainer, image=SendImage, height=40, width=200)
+    # restartButton = Button(buttonContainer, image=RestartImage, height=40, width=200, command=restartHome)
 
     restartButton.grid(row=0, sticky=W, padx=10, pady=10)
     sendButton.grid(row=0, column=1, sticky=E, padx=10, pady=10)
     bottomDecalBar()  # this stay at bottom
 
-
-def restartHome():
-    global Recipient_fileUploadName, Files_fileUploadName
-    Recipient_fileUploadName = StringVar()
-    Files_fileUploadName = []
-    homepage()
+    # } main page
 
 
-# } main page
 def openSite(site=0):  # dynamic github site opener
     # 0= home git page
     # 1= report issue site
