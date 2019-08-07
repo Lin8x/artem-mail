@@ -69,5 +69,5 @@ def authenticate():
         return True
     except smtplib.SMTPAuthenticationError:
         return False
-   
+
 
