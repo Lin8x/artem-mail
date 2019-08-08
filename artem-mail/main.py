@@ -98,7 +98,7 @@ def setTopBarMenus():
 
 
 def loginpage():
-    t.geometry("500x400")  # Size of window
+    t.geometry("500x450")  # Size of window
     clearScreen()
     menu = Menu(t)
     # help top menu bar for login screen
@@ -116,14 +116,14 @@ def loginpage():
     label.pack()
 
     # Everything below here is the buttons
-
+    mainFont = ("arial", 11)
     # Entry/Text Input
-    label1 = Label(t, text="Email Username")
-    E1 = Entry(t, bd=3, relief=GROOVE, width=30)
+    label1 = Label(t, text="Email Username", font=mainFont)
+    E1 = Entry(t, bd=3, relief=GROOVE, width=30, font=mainFont)
 
-    label2 = Label(t, text="Email Password")
+    label2 = Label(t, text="Email Password", font=mainFont)
     # pasword shows up as * when typing
-    E2 = Entry(t, bd=3, relief=GROOVE, width=30, show="*")
+    E2 = Entry(t, bd=3, relief=GROOVE, width=30, show="*", font=mainFont)
     # empty label as spacer between entry and buttons
     spacer = Label(text=" ")
     label1.pack()
@@ -132,16 +132,18 @@ def loginpage():
     E2.pack()
     # remember me checkboc
     remember = IntVar()
-    rememberCheck = Checkbutton(t, text="  Remeber me", variable=remember, font=("arial", 10))  # 0=off 1=on
+    rememberCheck = Checkbutton(t, text="  Remeber me", variable=remember, font=mainFont)  # 0=off 1=on
     rememberCheck.pack()
     spacer.pack()
 
-    # Button to quit the tool
-    button2 = Button(t, text='Quit The Tool', width=20, bd=3, command=sys.exit)
-    button1 = Button(t, text='Login in', width=20, bd=3, command=lambda: checkLogin(E1, E2, remember.get(), button1))
-
-    button1.pack()
-    button2.pack()
+    quitButton = Button(t, text='Quit The Tool', width=20, height=2, relief=GROOVE, bd=3, font=("arial", 10, "bold"),
+                        command=sys.exit)
+    loginButton = Button(t, text='Login in', width=20, height=2, relief=GROOVE, bd=3, font=("arial", 10, "bold"),
+                         command=lambda: checkLogin(E1, E2, remember.get(), loginButton))
+    spacer2 = Label(t, text=" ")
+    loginButton.pack()
+    spacer2.pack()
+    quitButton.pack()
     bottomDecalBar()
     # check if rememberMe file is there
     if os.path.exists("rememberMe.artem"):
@@ -270,37 +272,63 @@ def restartHome():
     homepage()
 
 
-def sendMessage():
+def sendMessage(sub, mess, files):
+    try:
+        recipient_Obj.get()
+        with open()as f:
+            p
+    # checks if recipient file/entry is emtpy(prevents sending nobody)
+    # checks if subject and message is empty (prevents sending empty messages)
+    # show a (red *) next to boxes that need to have a message? or show a pop up message?
     emailsender.sendEmail("danisgay@gmail.com", "amazing subject", "This is a message lol")
+
+
+def onFrameConfigure(canvas):  # megaScrollbar
+    '''Reset the scroll region to encompass the inner frame'''
+    canvas.configure(scrollregion=canvas.bbox("all"))
+
+
+def resize_frame(canvas, frameChild):
+    frameChild.config(height=canvas.height, width=canvas.width)
+    print("RESIZING")
 
 
 def homepage():
     t.geometry("700x800")
     clearScreen()
     setTopBarMenus()
-    addlogo()
     # title = Label(t, text="Mail (Under development)", font=("arial", 12, "bold"))
-    megaScrollbar = Scrollbar(t, command=t.yview)
-    t.config(yscrollcommand=megaScrollbar.set)
-    megaScrollbar.pack(side=RIGHT, fill=Y)
-    section1 = LabelFrame(t, text="1.Send To")
+
+    canvas = Canvas(t, bd=0, highlightthickness=0, relief='ridge')  # background="#ffffff"
+    megaScrollbar = Scrollbar(t, command=canvas.yview, width=25)
+    window = Frame(canvas, bd=0, highlightthickness=0)  # background="#ffffff"
+    canvas.configure(yscrollcommand=megaScrollbar.set)
+
+    section1 = LabelFrame(window, text="1.Send To")
+    section2 = LabelFrame(window, text="2.Subject")
+    section3 = LabelFrame(window, text="3.Message")
+    section4 = LabelFrame(window, text="4.Files")
+    subjectInput = Entry(section2, bd=1, width=93)
+
+    # menu button for sent to section
     sendMenu = Menubutton(section1, text="Select Option")
     sendMenu.menu = Menu(sendMenu, tearoff=0)
     sendMenu["menu"] = sendMenu.menu
     sendMenu.menu.add_command(label="1. Emails in file", command=lambda: sentTo_Menu(section1, sendMenu))
     sendMenu.menu.add_command(label="2. Enter recipients", command=lambda: sentTo_Menu(section1, sendMenu, option=1))
 
-    section2 = LabelFrame(t, text="2.Subject")
-    section3 = LabelFrame(t, text="3.Message")
-    section4 = LabelFrame(t, text="4.Files")
-    subjectInput = Entry(section2, bd=1, width=93)
-
     messageTextBox = Text(section3, bd=1, width=60, height=15)
     messageScroll = Scrollbar(section3, command=messageTextBox.yview, orient=VERTICAL, width=25, bg="green")
     messageTextBox.config(yscrollcommand=messageScroll.set)
     AddAttachments = Button(section4, text="Add Attachments", relief=GROOVE, command=get_file_attachment)
 
-    # title.pack()
+    # Layout is designed here
+    megaScrollbar.pack(side=RIGHT, fill=Y)
+    addlogo()
+    canvas.pack(fill=BOTH, expand=True)
+    canvas.create_window((4, 4), window=window, anchor="nw")
+    window.bind("<Configure>", lambda event, canvas=canvas: onFrameConfigure(canvas))
+    canvas.bind("<Configure>", lambda ca=canvas, wi=window: resize_frame(ca, wi))
     # Send to -section
     section1.pack(fill=X)
     sendMenu.config(relief=RAISED)
@@ -316,11 +344,11 @@ def homepage():
     section4.pack(fill=X)
     AddAttachments.grid(row=0, column=0, pady=10, padx=10)
     # End buttons
-    buttonContainer = Frame(t)
+    buttonContainer = Frame(window)
     buttonContainer.pack()
-    sendButton = Button(buttonContainer, text="Send Email", font=("arial", 10, "bold"), bd=3, relief=RIDGE,
+    sendButton = Button(buttonContainer, text="Send Email", font=("arial", 10, "bold"), bd=3, relief=RAISED,
                         width=30, height=2, bg="#7228bd", fg="white", command=lambda: sendMessage())
-    restartButton = Button(buttonContainer, text="Restart", font=("arial", 10, "bold"), bd=3, relief=RIDGE,
+    restartButton = Button(buttonContainer, text="Restart", font=("arial", 10, "bold"), bd=3, relief=RAISED,
                            command=restartHome, width=30, height=2, fg="red")
 
     # image1 = Image.open("RestartButton.png")
