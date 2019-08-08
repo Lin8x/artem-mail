@@ -274,33 +274,46 @@ def sendMessage():
     emailsender.sendEmail("danisgay@gmail.com", "amazing subject", "This is a message lol")
 
 
+def onFrameConfigure(canvas):
+    '''Reset the scroll region to encompass the inner frame'''
+    canvas.configure(scrollregion=canvas.bbox("all"))
+
+
 def homepage():
     t.geometry("700x800")
     clearScreen()
     setTopBarMenus()
-    addlogo()
     # title = Label(t, text="Mail (Under development)", font=("arial", 12, "bold"))
-    megaScrollbar = Scrollbar(t, command=t.yview)
-    t.config(yscrollcommand=megaScrollbar.set)
-    megaScrollbar.pack(side=RIGHT, fill=Y)
-    section1 = LabelFrame(t, text="1.Send To")
+
+    canvas = Canvas(t, borderwidth=0)  # background="#ffffff"
+    megaScrollbar = Scrollbar(t, command=canvas.yview)
+    window = Frame(canvas)  # background="#ffffff"
+    canvas.configure(yscrollcommand=megaScrollbar.set)
+
+    section1 = LabelFrame(window, text="1.Send To")
+    section2 = LabelFrame(window, text="2.Subject")
+    section3 = LabelFrame(window, text="3.Message")
+    section4 = LabelFrame(window, text="4.Files")
+    subjectInput = Entry(section2, bd=1, width=93)
+
+    # menu button for sent to section
     sendMenu = Menubutton(section1, text="Select Option")
     sendMenu.menu = Menu(sendMenu, tearoff=0)
     sendMenu["menu"] = sendMenu.menu
     sendMenu.menu.add_command(label="1. Emails in file", command=lambda: sentTo_Menu(section1, sendMenu))
     sendMenu.menu.add_command(label="2. Enter recipients", command=lambda: sentTo_Menu(section1, sendMenu, option=1))
 
-    section2 = LabelFrame(t, text="2.Subject")
-    section3 = LabelFrame(t, text="3.Message")
-    section4 = LabelFrame(t, text="4.Files")
-    subjectInput = Entry(section2, bd=1, width=93)
-
     messageTextBox = Text(section3, bd=1, width=60, height=15)
     messageScroll = Scrollbar(section3, command=messageTextBox.yview, orient=VERTICAL, width=25, bg="green")
     messageTextBox.config(yscrollcommand=messageScroll.set)
     AddAttachments = Button(section4, text="Add Attachments", relief=GROOVE, command=get_file_attachment)
-
-    # title.pack()
+    
+    # Layout is designed here
+    megaScrollbar.pack(side=RIGHT, fill=Y)
+    addlogo()
+    canvas.pack(fill=BOTH, expand=True)
+    canvas.create_window((4, 4), window=window, anchor="nw")
+    window.bind("<Configure>", lambda event, canvas=canvas: onFrameConfigure(canvas))
     # Send to -section
     section1.pack(fill=X)
     sendMenu.config(relief=RAISED)
