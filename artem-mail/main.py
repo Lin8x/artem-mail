@@ -150,7 +150,7 @@ def loginpage():
         print("Found rememberMe.artem")
         with open("rememberMe.artem", "rb") as file:
             # marks the rememberMe checkbox
-            rememberCheck.select()
+            # rememberCheck.select()
             data = file.read()
             file.close()
             # converts byte backinto a string for split()
@@ -220,10 +220,13 @@ def checkLogin(userInput, passInput, storeUserandPass, button):  # prevents inva
 
 # Main page stuff here {
 def selectRecipentFile():
+    global recipient_Obj
     t.filename = filedialog.askopenfilename(
         initialdir="~/", title="Select txt file...", filetypes=(("Text Files", "*.txt"), ("all files", "*.*")))
     global Recipient_fileUploadName
     Recipient_fileUploadName.set(t.filename)
+
+    recipient_Obj = t.filename  # to reference later
     # Recipient_fileUploadName = t.filename
     print(Recipient_fileUploadName)
 
@@ -252,8 +255,9 @@ def sentTo_Menu(section, makeMeGone, option=0):
         selectrecipentButton.grid(row=0, column=3, padx=10, pady=10)
         fileLoc.grid(row=0, column=5, padx=10, pady=10)
     else:  # enter all recipents
-
+        global recipient_Obj
         BIGemails = Text(section, height=4, width=80, font=("arial", 10))
+        recipient_Obj = BIGemails  # keeps a reference for later
         scrll = Scrollbar(section, command=BIGemails.yview)
         BIGemails.config(yscrollcommand=scrll.set)
         # BIGemails.insert("1.0",
@@ -272,15 +276,24 @@ def restartHome():
     homepage()
 
 
-def sendMessage(sub, mess, files):
-    try:
-        recipient_Obj.get()
-        with open()as f:
-            p
+def sendMessage(sub, mess, files=[]):
+    sendto = ""
+    # get recipients
+    try:  # entry
+
+        print(recipient_Obj.get("1.0", END))
+        sendto = Recipient_fileUploadName
+    except:  # from file
+        with open(str(Recipient_fileUploadName), "r")as f:
+            data = f.readlines()
+            print(data)
+            sendto = data
+            f.close()
+
     # checks if recipient file/entry is emtpy(prevents sending nobody)
     # checks if subject and message is empty (prevents sending empty messages)
     # show a (red *) next to boxes that need to have a message? or show a pop up message?
-    emailsender.sendEmail("danisgay@gmail.com", "amazing subject", "This is a message lol")
+    emailsender.sendEmail(sendto, sub, mess)
 
 
 def onFrameConfigure(canvas):  # megaScrollbar
@@ -290,7 +303,7 @@ def onFrameConfigure(canvas):  # megaScrollbar
 
 def resize_frame(canvas, frameChild):
     frameChild.config(height=canvas.height, width=canvas.width)
-    print("RESIZING")
+    # print("RESIZING")
 
 
 def homepage():
@@ -347,7 +360,9 @@ def homepage():
     buttonContainer = Frame(window)
     buttonContainer.pack()
     sendButton = Button(buttonContainer, text="Send Email", font=("arial", 10, "bold"), bd=3, relief=RAISED,
-                        width=30, height=2, bg="#7228bd", fg="white", command=lambda: sendMessage())
+                        width=30, height=2, fg="green",
+                        command=lambda: sendMessage(subjectInput.get(), messageTextBox.get("1.0", END),
+                                                    Files_fileUploadName))
     restartButton = Button(buttonContainer, text="Restart", font=("arial", 10, "bold"), bd=3, relief=RAISED,
                            command=restartHome, width=30, height=2, fg="red")
 
