@@ -1,7 +1,6 @@
 implement pyinstaller for code freezing (need cross platform support)
 add support for zip github download 
-add emailing script
-add Artem Leaders logo footer for every page (bottom right maybe)
-make setup.py (cross platform)
+add support for sending file attachments
+
 
 
