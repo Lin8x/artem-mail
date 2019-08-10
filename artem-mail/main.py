@@ -9,10 +9,9 @@ from cryptography.fernet import Fernet
 import emailsender
 
 t = Tk()  # where m is the name of the main window object
-Recipient_fileUploadName = StringVar()
+Recipient_fileUploadName = StringVar()  # needs to be of type StringVar for updating Label dynamically
 Files_fileUploadName = []
-
-recipient_Data = ""  # reference entry / file data
+SendToTEXT = None  # reference to the text box of SEND TO section
 
 
 # theme Decal functions here {
@@ -225,10 +224,8 @@ def selectRecipentFile():
         initialdir="~/", title="Select txt file...", filetypes=(("Text Files", "*.txt"), ("all files", "*.*")))
     global Recipient_fileUploadName
     Recipient_fileUploadName.set(t.filename)
-
-    recipient_Data = t.filename  # to reference later
     # Recipient_fileUploadName = t.filename
-    print(Recipient_fileUploadName)
+    # print("loc: " + t.filename + "\nFile: " + str(Recipient_fileUploadName.get()))
 
 
 def get_file_attachment():
@@ -255,6 +252,7 @@ def sentTo_Menu(section, makeMeGone, option=0):
         selectrecipentButton.grid(row=0, column=3, padx=10, pady=10)
         fileLoc.grid(row=0, column=5, padx=10, pady=10)
     else:  # enter all recipents
+        global SendToTEXT
         BIGemails = Text(section, height=5, width=80, font=("arial", 10))
         scrll = Scrollbar(section, command=BIGemails.yview)
         BIGemails.config(yscrollcommand=scrll.set)
@@ -265,6 +263,7 @@ def sentTo_Menu(section, makeMeGone, option=0):
         questionButton = Button(section, text="?", font=("arial", 15, "bold"), relief=GROOVE, bd=3, width=2,
                                 command=helpMessage)
         questionButton.grid(row=0, column=100, padx=3, pady=1)
+        SendToTEXT = BIGemails  # reference for later processing of data
 
 
 def restartHome():
@@ -274,31 +273,40 @@ def restartHome():
     homepage()
 
 
-def sendMessage(recipientStuff, sub, mess, files=[]):
+def sendMessage(sub, mess, files=[]):
     sendto = ""
-    # get recipients
-
-    if recipient_Data == "" or len(recipient_Data) < 2:
-        # entry
-
-        print(recipient_Data)
-        # sendto = Recipient_fileUploadName
+    errorSending = []  # displays the people that couldnt send to
+    # get recipients and store the list of people in sendto
+    if SendToTEXT is not None:  # entry
+        # checks if @ and ; are in the lines
+        data = SendToTEXT.get("1.0", END).replace(" ", "")  # remove whitespace
+        data = data.split("\n")  # put everyline in a list
+        for person in data:
+            if person.find("@") > -1 and person.find(";") > -1:
+                print("YAY")
+        sendto = data
     else:  # from file
-
-        with open(str(Recipient_fileUploadName), "r")as f:
+        print("Reading From: " + str(Recipient_fileUploadName.get()))
+        with open(Recipient_fileUploadName.get(), "r")as f:
             data = f.readlines()
-            print(data)
-            # sendto = data[0]
+            sendto = data
             f.close()
+    print(sendto)
+    person = 0
+    try:
+        while person < len(sendto):
+            emailsender.sendEmail(sendto, sub, mess)
+            person += 1
+    except:
+        errorSending.append(sendto[person])
 
     # checks if recipient file/entry is emtpy(prevents sending nobody)
     # checks if subject and message is empty (prevents sending empty messages)
     # show a (red *) next to boxes that need to have a message? or show a pop up message?
-    # emailsender.sendEmail(sendto, sub, mess)
 
 
 def onFrameConfigure(canvas):  # megaScrollbar on the right side of screen
-    '''Reset the scroll region to encompass the inner frame'''
+    """Reset the scroll region to encompass the inner frame"""
     canvas.configure(scrollregion=canvas.bbox("all"))
 
 
@@ -324,7 +332,8 @@ def homepage():
     sendMenu.menu = Menu(sendMenu, tearoff=0)
     sendMenu["menu"] = sendMenu.menu
     sendMenu.menu.add_command(label="1. Emails in file", command=lambda: sentTo_Menu(section1, sendMenu))
-    sendMenu.menu.add_command(label="2. Enter recipients", command=lambda: sentTo_Menu(section1, sendMenu, option=1))
+    sendMenu.menu.add_command(label="2. Enter recipients",
+                              command=lambda: sentTo_Menu(section1, sendMenu, option=1))
 
     messageTextBox = Text(section3, bd=1, width=60, height=15)
     messageScroll = Scrollbar(section3, command=messageTextBox.yview, orient=VERTICAL, width=25)
