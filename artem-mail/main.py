@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from tkinter import *
 from tkinter import messagebox, filedialog
-from  import , 
+from PIL import Image, ImageTk
 import webbrowser
 import sys
 import os
@@ -12,7 +12,7 @@ t = Tk()  # where m is the name of the main window object
 Recipient_fileUploadName = StringVar()
 Files_fileUploadName = []
 
-recipient_Obj = Entry()  # reference entry or file data
+recipient_Data = ""  # reference entry / file data
 
 
 # theme Decal functions here {
@@ -20,20 +20,20 @@ recipient_Obj = Entry()  # reference entry or file data
 
 def topDecalBar():
     # top bar here
-     = .open("topbar.jpg")
-     = .resize((.size[0], 20), .ANTIALIAS)
-    photo = .Photo()
-    label = Label(=photo)
-    label. = photo  # keep a reference!
+    image = Image.open("topbar.jpg")
+    image = image.resize((image.size[0], 20), Image.ANTIALIAS)
+    photo = ImageTk.PhotoImage(image)
+    label = Label(image=photo)
+    label.image = photo  # keep a reference!
     label.pack(fill=X)
 
 
 def bottomDecalBar():
-     = .open("topbar.jpg")
-     = .resize((.size[0], 20), .ANTIALIAS)
-    photo = .Photo()
-    label = Label(=photo)
-    label. = photo  # keep a reference!
+    image = Image.open("topbar.jpg")
+    image = image.resize((image.size[0], 20), Image.ANTIALIAS)
+    photo = ImageTk.PhotoImage(image)
+    label = Label(image=photo)
+    label.image = photo  # keep a reference!
     label.pack(side=BOTTOM, fill=X)
 
 
@@ -51,15 +51,15 @@ def addHelpMenu(tkobject):
     return helpmenu
 
 
-# this brings in artem logo 
+# this brings in artem logo image
 def addlogo():
     # logo here
     topDecalBar()
-     = .open("artemlogo.png")  # u need PNG file to store  Alpha
-     = .resize((200, 100), .ANTIALIAS)
-    photo = .Photo()
-    label = Label(=photo)
-    label. = photo  # keep a reference!
+    image = Image.open("artemlogo.png")  # u need PNG file to store image Alpha
+    image = image.resize((200, 100), Image.ANTIALIAS)
+    photo = ImageTk.PhotoImage(image)
+    label = Label(image=photo)
+    label.image = photo  # keep a reference!
     label.pack()
 
 
@@ -108,11 +108,11 @@ def loginpage():
 
     # logo here
     topDecalBar()
-     = .open("artemlogo.png")  # u need PNG file to store  Alpha
-     = .resize((200, 100), .ANTIALIAS)
-    photo = .Photo()
-    label = Label(=photo)
-    label. = photo  # keep a reference!
+    image = Image.open("artemlogo.png")  # u need PNG file to store image Alpha
+    image = image.resize((200, 100), Image.ANTIALIAS)
+    photo = ImageTk.PhotoImage(image)
+    label = Label(image=photo)
+    label.image = photo  # keep a reference!
     label.pack()
 
     # Everything below here is the buttons
@@ -213,20 +213,20 @@ def checkLogin(userInput, passInput, storeUserandPass, button):  # prevents inva
             button.config(text="Login in")
             messagebox.showerror(
                 "Incorrect Username or Password.",
-                "If your username and password is correct but you are still getting this error:\n \nVisit the troubleshooting page https://github.com/asian-code/artem-mail/wiki")
+                "If your username and password is correct but you are still getting this error\n Visit the troubleshooting page https://github.com/asian-code/artem-mail/wiki")
 
 
 # } login page stuff
 
 # Main page stuff here {
 def selectRecipentFile():
-    global recipient_Obj
+    global recipient_Data
     t.filename = filedialog.askopenfilename(
         initialdir="~/", title="Select txt file...", filetypes=(("Text Files", "*.txt"), ("all files", "*.*")))
     global Recipient_fileUploadName
     Recipient_fileUploadName.set(t.filename)
 
-    recipient_Obj = t.filename  # to reference later
+    recipient_Data = t.filename  # to reference later
     # Recipient_fileUploadName = t.filename
     print(Recipient_fileUploadName)
 
@@ -255,13 +255,11 @@ def sentTo_Menu(section, makeMeGone, option=0):
         selectrecipentButton.grid(row=0, column=3, padx=10, pady=10)
         fileLoc.grid(row=0, column=5, padx=10, pady=10)
     else:  # enter all recipents
-        global recipient_Obj
         BIGemails = Text(section, height=4, width=80, font=("arial", 10))
-        recipient_Obj = BIGemails  # keeps a reference for later
         scrll = Scrollbar(section, command=BIGemails.yview)
         BIGemails.config(yscrollcommand=scrll.set)
-        # BIGemails.insert("1.0",
-        #                  "# Format:(Name);(Email) Example-John Smith ; johnny@gmail.com\n#(Name) is optional \tExample-;johnny@gmail.com")
+        BIGemails.insert("1.0",
+                         "# Example:\nJohn Smith;johnny@gmail.com\nJames William;willi@gmail.com\n;kittylover@gmail.com")
         BIGemails.grid(row=0, pady=15, padx=10)
         scrll.grid(row=0, column=81, sticky="NS")
         questionButton = Button(section, text="?", font=("arial", 15, "bold"), relief=GROOVE, bd=3, width=2,
@@ -276,24 +274,27 @@ def restartHome():
     homepage()
 
 
-def sendMessage(sub, mess, files=[]):
+def sendMessage(recipientStuff, sub, mess, files=[]):
     sendto = ""
     # get recipients
-    try:  # entry
 
-        print(recipient_Obj.get("1.0", END))
-        sendto = Recipient_fileUploadName
-    except:  # from file
+    if recipient_Data == "" or len(recipient_Data) < 2:
+        # entry
+
+        print(recipient_Data)
+        # sendto = Recipient_fileUploadName
+    else:  # from file
+
         with open(str(Recipient_fileUploadName), "r")as f:
             data = f.readlines()
             print(data)
-            sendto = data
+            # sendto = data[0]
             f.close()
 
     # checks if recipient file/entry is emtpy(prevents sending nobody)
     # checks if subject and message is empty (prevents sending empty messages)
     # show a (red *) next to boxes that need to have a message? or show a pop up message?
-    emailsender.sendEmail(sendto, sub, mess)
+    # emailsender.sendEmail(sendto, sub, mess)
 
 
 def onFrameConfigure(canvas):  # megaScrollbar
@@ -366,15 +367,15 @@ def homepage():
     restartButton = Button(buttonContainer, text="Restart", font=("arial", 10, "bold"), bd=3, relief=RAISED,
                            command=restartHome, width=30, height=2, fg="red")
 
-    # 1 = .open("RestartButton.png")
-    # 1 = 1.resize((100, 100), .ANTIALIAS)
-    # Restart = .Photo(1)
-    # 2 = .open("SendButton.png")
-    # Send = Send.resize((100, 100), .ANTIALIAS)
-    # Send = .Photo(2)
-    # WTF DAN HELP ME!!!!!!!!!!!! S FOR MY BUTTONS DONT WORK ***************************************************
-    # sendButton = Button(buttonContainer, =Send, height=40, width=200)
-    # restartButton = Button(buttonContainer, =Restart, height=40, width=200, command=restartHome)
+    # image1 = Image.open("RestartButton.png")
+    # image1 = image1.resize((100, 100), Image.ANTIALIAS)
+    # RestartImage = ImageTk.PhotoImage(image1)
+    # image2 = Image.open("SendButton.png")
+    # SendImage = SendImage.resize((100, 100), Image.ANTIALIAS)
+    # SendImage = ImageTk.PhotoImage(image2)
+    # WTF DAN HELP ME!!!!!!!!!!!! IMAGES FOR MY BUTTONS DONT WORK ***************************************************
+    # sendButton = Button(buttonContainer, image=SendImage, height=40, width=200)
+    # restartButton = Button(buttonContainer, image=RestartImage, height=40, width=200, command=restartHome)
 
     restartButton.grid(row=0, sticky=W, padx=10, pady=10)
     sendButton.grid(row=0, column=1, sticky=E, padx=10, pady=10)
