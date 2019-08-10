@@ -10,7 +10,7 @@
 
 <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/artemnexgenlogo.png" alt="artemnexgen" width="200" height="70">
 
-Artem NexGen is an international network of high-achieving youth pursuing professional roles. Our organization provides business content and networking abilities, as well as aspiring members from our community with a greater level of raw exposure to a professional work-like setting. Additionally, Artem NexGen provides a platform for the most aspiring youth leaders to be mentored and to meet seasoned professionals that directly practice in their sectors of interest.
+Artem NexGen is an international network of high-achieving youth pursuing professional roles. Our organization provides business content and networking abilities, as well as aspiring members from our community with a greater level of raw exposure to a professional work-like setting. Additionally, Artem NexGen provides a platform for the most aspiring youth leaders to be mentored and to meet seasoned professionals that directly practice in their sectors of interest. <br>
 
 ## <p align="center"> <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/artemmaillogo.png" alt="artemmail" width="20" height="20"> &nbsp; About Artem-Mail &nbsp; <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/artemmaillogo.png" alt="artemmail" width="20" height="20"> </p>
 
