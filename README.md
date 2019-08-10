@@ -33,7 +33,7 @@ Artem NexGen is an international network of high-achieving youth pursuing profes
 
 <img src="https://github.com/Lin8x/artem-mail/blob/master/artem-mail/topbar.jpg" width="100%" height="5">
 
-## <p align="center"> <p align="center"> <img src="http://cdn.onlinewebfonts.com/svg/img_452175.png" alt="contribution" width="20" height="20"> &nbsp; Contributing &nbsp; <img src="http://cdn.onlinewebfonts.com/svg/img_452175.png" alt="contribution" width="20" height="20"> </p>
+## <p align="center"> <p align="center"> <img src="http://cdn.onlinewebfonts.com/svg/img_452175.png" alt="contribution" width="20" height="15"> &nbsp; Contributing &nbsp; <img src="http://cdn.onlinewebfonts.com/svg/img_452175.png" alt="contribution" width="20" height="15"> </p>
 
 Please read our [Contribution Wiki Page](https://github.com/Lin8x/artem-mail/wiki/Contribution) for details on our code of conduct, and the process for submitting pull requests to us.
 
