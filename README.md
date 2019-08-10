@@ -29,7 +29,7 @@ Artem NexGen is an international network of high-achieving youth pursuing profes
 
 *Please read our ![Troubleshooting Installation](https://github.com/Lin8x/artem-mail/wiki/Troubleshooting-Installation) for more information!*
 
-<img src="https://github.com/Lin8x/artem-mail/blob/master/artem-mail/topbar.jpg" width="100%" height="5">
+<br> <img src="https://github.com/Lin8x/artem-mail/blob/master/artem-mail/topbar.jpg" width="100%" height="5">
 
 ## <p align="center"> <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/howtorunimage.png" alt="running logo" width="20" height="20"> &nbsp; How to Run &nbsp; <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/howtorunimage.png" alt="running logo" width="20" height="20"> </p>
 
