@@ -255,7 +255,7 @@ def sentTo_Menu(section, makeMeGone, option=0):
         selectrecipentButton.grid(row=0, column=3, padx=10, pady=10)
         fileLoc.grid(row=0, column=5, padx=10, pady=10)
     else:  # enter all recipents
-        BIGemails = Text(section, height=4, width=80, font=("arial", 10))
+        BIGemails = Text(section, height=5, width=80, font=("arial", 10))
         scrll = Scrollbar(section, command=BIGemails.yview)
         BIGemails.config(yscrollcommand=scrll.set)
         BIGemails.insert("1.0",
@@ -297,18 +297,13 @@ def sendMessage(recipientStuff, sub, mess, files=[]):
     # emailsender.sendEmail(sendto, sub, mess)
 
 
-def onFrameConfigure(canvas):  # megaScrollbar
+def onFrameConfigure(canvas):  # megaScrollbar on the right side of screen
     '''Reset the scroll region to encompass the inner frame'''
     canvas.configure(scrollregion=canvas.bbox("all"))
 
 
-def resize_frame(canvas, frameChild):
-    frameChild.config(height=canvas.height, width=canvas.width)
-    # print("RESIZING")
-
-
 def homepage():
-    t.geometry("700x800")
+    t.geometry("700x730")
     clearScreen()
     setTopBarMenus()
     # title = Label(t, text="Mail (Under development)", font=("arial", 12, "bold"))
@@ -332,7 +327,7 @@ def homepage():
     sendMenu.menu.add_command(label="2. Enter recipients", command=lambda: sentTo_Menu(section1, sendMenu, option=1))
 
     messageTextBox = Text(section3, bd=1, width=60, height=15)
-    messageScroll = Scrollbar(section3, command=messageTextBox.yview, orient=VERTICAL, width=25, bg="green")
+    messageScroll = Scrollbar(section3, command=messageTextBox.yview, orient=VERTICAL, width=25)
     messageTextBox.config(yscrollcommand=messageScroll.set)
     AddAttachments = Button(section4, text="Add Attachments", relief=GROOVE, command=get_file_attachment)
 
@@ -342,7 +337,6 @@ def homepage():
     canvas.pack(fill=BOTH, expand=True)
     canvas.create_window((4, 4), window=window, anchor="nw")
     window.bind("<Configure>", lambda event, canvas=canvas: onFrameConfigure(canvas))
-    canvas.bind("<Configure>", lambda ca=canvas, wi=window: resize_frame(ca, wi))
     # Send to -section
     section1.pack(fill=X)
     sendMenu.config(relief=RAISED)
