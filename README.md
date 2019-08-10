@@ -27,7 +27,7 @@ Artem NexGen is an international network of high-achieving youth pursuing profes
 2. Type in your terminal:
 `git clone https://www.github.com/lin8x/artem-mail`
 
-**Please read our ![Troubleshooting Installation](https://github.com/Lin8x/artem-mail/wiki/Troubleshooting-Installation) for more information!**
+*Please read our ![Troubleshooting Installation](https://github.com/Lin8x/artem-mail/wiki/Troubleshooting-Installation) for more information!*
 
 <img src="https://github.com/Lin8x/artem-mail/blob/master/artem-mail/topbar.jpg" width="100%" height="5">
 
