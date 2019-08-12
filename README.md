@@ -14,7 +14,7 @@ Artem NexGen is an international network of high-achieving youth pursuing profes
 
 ## <p align="center"> <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/artemmaillogo.png" alt="artemmail" width="20" height="20"> &nbsp; About Artem-Mail &nbsp; <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/artemmaillogo.png" alt="artemmail" width="20" height="20"> </p>
 
-*Please read [the wiki page](https://github.com/Lin8x/artem-mail/wiki) for more information on the tool!*
+*Please read [The Wiki Page](https://github.com/Lin8x/artem-mail/wiki) for more information on the tool!*
 
 <img src="https://github.com/Lin8x/artem-mail/blob/master/artem-mail/topbar.jpg" width="100%" height="5">
 
