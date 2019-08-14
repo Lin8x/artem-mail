@@ -1,6 +1,8 @@
 implement pyinstaller for code freezing (need cross platform support)
 add support for zip github download 
 add support for sending file attachments
+add setup.py for mac and linux users. window users run the exe file
+add multi threading to prevent (Not responding) window message if long processing
 
 
 
