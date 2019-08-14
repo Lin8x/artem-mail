@@ -14,6 +14,8 @@ Artem NexGen is an international network of high-achieving youth pursuing profes
 
 ## <p align="center"> <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/artemmaillogo.png" alt="artemmail" width="20" height="20"> &nbsp; About Artem-Mail &nbsp; <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/artemmaillogo.png" alt="artemmail" width="20" height="20"> </p>
 
+*Please read [The Wiki Page](https://github.com/Lin8x/artem-mail/wiki) for more information on the tool!*
+
 <img src="https://github.com/Lin8x/artem-mail/blob/master/artem-mail/topbar.jpg" width="100%" height="5">
 
 ## <p align="center"> <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/requirementslogo.png" alt="requirements"> &nbsp; Requirements &nbsp; <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/requirementslogo.png" alt="requirements" width="20" height="20"> </p>
@@ -27,11 +29,13 @@ Artem NexGen is an international network of high-achieving youth pursuing profes
 2. Type in your terminal:
 `git clone https://www.github.com/lin8x/artem-mail`
 
-<br> *Please read our ![Troubleshooting Installation](https://github.com/Lin8x/artem-mail/wiki/Troubleshooting-Installation) for more information!*
+<br> *Please read our ![Troubleshooting Installation Wiki Page](https://github.com/Lin8x/artem-mail/wiki/Troubleshooting-Installation) for more information!*
 
 <img src="https://github.com/Lin8x/artem-mail/blob/master/artem-mail/topbar.jpg" width="100%" height="5">
 
 ## <p align="center"> <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/howtorunimage.png" alt="running logo" width="20" height="20"> &nbsp; How to Run &nbsp; <img src="https://raw.githubusercontent.com/Lin8x/artem-mail/master/images/howtorunimage.png" alt="running logo" width="20" height="20"> </p>
+
+*Please read our ![Logging In](https://github.com/Lin8x/artem-mail/wiki/Logging-In) and [Sending an Email](https://github.com/Lin8x/artem-mail/wiki/Sending-an-Email) wiki page for more information!*
 
 <img src="https://github.com/Lin8x/artem-mail/blob/master/artem-mail/topbar.jpg" width="100%" height="5">
 
