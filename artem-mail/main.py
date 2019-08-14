@@ -10,7 +10,7 @@ import emailsender
 
 t = Tk()  # where m is the name of the main window object
 Recipient_fileUploadName = StringVar()  # needs to be of type StringVar for updating Label dynamically
-Files_fileUploadName = []
+Files_fileUploadName = []  # stores all attachment locations
 SendToTEXT = None  # reference to the text box of SEND TO section
 
 
@@ -183,36 +183,39 @@ def checkLogin(userInput, passInput, storeUserandPass, button):  # prevents inva
         messagebox.showerror(
             "Invalid Input", "You have reached the max character threshold\nPlease try again")
     else:
-        can_pass = emailsender.login_to_email(userInput.get(), passInput.get())
-        # print("Variavle :"+str(storeUserandPass))
-        if storeUserandPass == 1:
-            # stores new info into system
-            key = Fernet.generate_key()
-            fernet = Fernet(key)
-            info = userInput.get() + " " + passInput.get()
-            encryptedData = fernet.encrypt(info.encode("utf-8"))
-            with open("rememberMe.artem", 'wb') as f:
-                f.write(key)
-                f.write("ZGFuaXNnYXk=".encode("utf-8"))
-                f.write(encryptedData)
-                f.close()
-                print("Created encrpted file name: rememberMe.artem")
+        try:
+            can_pass = emailsender.login_to_email(userInput.get(), passInput.get())
+            # print("Variavle :"+str(storeUserandPass))
+            if storeUserandPass == 1:
+                # stores new info into system
+                key = Fernet.generate_key()
+                fernet = Fernet(key)
+                info = userInput.get() + " " + passInput.get()
+                encryptedData = fernet.encrypt(info.encode("utf-8"))
+                with open("rememberMe.artem", 'wb') as f:
+                    f.write(key)
+                    f.write("ZGFuaXNnYXk=".encode("utf-8"))
+                    f.write(encryptedData)
+                    f.close()
+                    print("Created encrpted file name: rememberMe.artem")
 
-            # with open("rememberMe.artem", "wb") as file:
-            #     info=userInput.get()+" "+passInput.get()
-            #     file.write(info.encode('utf-8'))# converts to byte
-            #     print("Saved file as rememberMe.artem")
-            #     file.close()
-            # with open("rememberMe.artem","rb") as read:
-            #     info=read.read()
-            #     print(info.decode('utf-8'))#converts back to string
-        if can_pass:
-            homepage()
-        else:
-            button.config(text="Login in")
-            messagebox.showerror(
-                "Incorrect Username or Password.",
-                "If your username and password is correct but you are still getting this error\n Visit the troubleshooting page https://github.com/asian-code/artem-mail/wiki")
+                # with open("rememberMe.artem", "wb") as file:
+                #     info=userInput.get()+" "+passInput.get()
+                #     file.write(info.encode('utf-8'))# converts to byte
+                #     print("Saved file as rememberMe.artem")
+                #     file.close()
+                # with open("rememberMe.artem","rb") as read:
+                #     info=read.read()
+                #     print(info.decode('utf-8'))#converts back to string
+            if can_pass:
+                homepage()
+            else:
+                button.config(text="Login in")
+                messagebox.showerror(
+                    "Incorrect Username or Password.",
+                    "If your username and password is correct but you are still getting this error\n Visit the troubleshooting page https://github.com/asian-code/artem-mail/wiki")
+        except Exception:
+            messagebox.showerror("No Connection", "Unable to connect to servers")
 
 
 # } login page stuff
@@ -274,16 +277,12 @@ def restartHome():
 
 
 def sendMessage(sub, mess, files=[]):
-    sendto = ""
-    errorSending = []  # displays the people that couldnt send to
+    sendto = []  # list of all the people to send to
+    errorSending = []  # displays the people that couldn't send to
     # get recipients and store the list of people in sendto
     if SendToTEXT is not None:  # entry
-        # checks if @ and ; are in the lines
         data = SendToTEXT.get("1.0", END).replace(" ", "")  # remove whitespace
-        data = data.split("\n")  # put everyline in a list
-        for person in data:
-            if person.find("@") > -1 and person.find(";") > -1:
-                print("YAY")
+        data = data.split("\n")  # put every line in a list
         sendto = data
     else:  # from file
         print("Reading From: " + str(Recipient_fileUploadName.get()))
@@ -291,6 +290,16 @@ def sendMessage(sub, mess, files=[]):
             data = f.readlines()
             sendto = data
             f.close()
+
+    print(sendto)
+    # checks if txt file/recipient entry is correctly formatted
+    # checks if @ and ; are in the lines
+    for person in sendto:
+        if person.find("@") == -1 or person.find(";") == -1:
+            popup = messagebox.showerror("Information is not correctly formatted",
+                                         "Please try again. for any help press the [ ? ] button")
+            return
+        
     print(sendto)
     person = 0
     try:
@@ -300,6 +309,7 @@ def sendMessage(sub, mess, files=[]):
     except:
         errorSending.append(sendto[person])
 
+    print("error sending to " + str(errorSending))
     # checks if recipient file/entry is emtpy(prevents sending nobody)
     # checks if subject and message is empty (prevents sending empty messages)
     # show a (red *) next to boxes that need to have a message? or show a pop up message?
