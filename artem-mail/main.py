@@ -299,7 +299,11 @@ def sendMessage(sub, mess, files=[]):
             popup = messagebox.showerror("Information is not correctly formatted",
                                          "Please try again. for any help press the [ ? ] button")
             return
-        
+
+    # check for empty subject and messagebox
+    if sub.strip() == "" or mess.strip() == "":
+        popup = messagebox.showerror("Empty entries", "Please enter something in for subject and message box")
+    # send the emails
     print(sendto)
     person = 0
     try:
