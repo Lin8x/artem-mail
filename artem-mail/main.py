@@ -7,6 +7,7 @@ import sys
 import os
 from cryptography.fernet import Fernet
 import emailsender
+# import threading
 
 t = Tk()  # where m is the name of the main window object
 Recipient_fileUploadName = StringVar()  # needs to be of type StringVar for updating Label dynamically
@@ -137,7 +138,7 @@ def loginpage():
 
     quitButton = Button(t, text='Quit The Tool', width=20, height=2, relief=GROOVE, bd=3, font=("arial", 10, "bold"),
                         command=sys.exit)
-    loginButton = Button(t, text='Login in', width=20, height=2, relief=GROOVE, bd=3, font=("arial", 10, "bold"),
+    loginButton = Button(t, text='Login', width=20, height=2, relief=GROOVE, bd=3, font=("arial", 10, "bold"),
                          command=lambda: checkLogin(E1, E2, remember.get(), loginButton))
     spacer2 = Label(t, text=" ")
     loginButton.pack()
@@ -174,7 +175,14 @@ def loginpage():
     t.mainloop()
 
 
+# def checkLoginThread(userInput, passInput, storeUserandPass, button):
+#     t2 = threading.Thread(target=checkLogin, args=(userInput, passInput, storeUserandPass, button))
+#     t2.start()
+#     t2.join()
+
+
 def checkLogin(userInput, passInput, storeUserandPass, button):  # prevents invalid inputs
+
     button.config(text="Loading...")
     if userInput.get() == "" or passInput.get() == "":
         messagebox.showerror(
@@ -284,14 +292,15 @@ def sendMessage(sub, mess, files=[]):
         data = SendToTEXT.get("1.0", END).replace(" ", "")  # remove whitespace
         data = data.split("\n")  # put every line in a list
         sendto = data
+        sendto.pop()
     else:  # from file
         print("Reading From: " + str(Recipient_fileUploadName.get()))
-        with open(Recipient_fileUploadName.get(), "r")as f:
+        with open(str(Recipient_fileUploadName.get()), "r")as f:
             data = f.readlines()
             sendto = data
             f.close()
 
-    print(sendto)
+    print("SENDTO:" + str(sendto))
     # checks if txt file/recipient entry is correctly formatted
     # checks if @ and ; are in the lines
     for person in sendto:
@@ -301,19 +310,23 @@ def sendMessage(sub, mess, files=[]):
             return
 
     # check for empty subject and messagebox
-    if sub.strip() == "" or mess.strip() == "":
+    # print("Subject box{" + str(sub) + "}\nstrip version{" + sub.replace(" ", "") + "}END")
+    if sub.replace(" ", "") == "" or mess.replace(" ", "") == "":
         popup = messagebox.showerror("Empty entries", "Please enter something in for subject and message box")
     # send the emails
     print(sendto)
     person = 0
     try:
         while person < len(sendto):
-            emailsender.sendEmail(sendto, sub, mess)
+            print("Sending to " + str(sendto[person].split(";")))
+            emailsender.sendEmail(sendto[person].split(";")[1], sub, mess)
             person += 1
     except:
         errorSending.append(sendto[person])
-
-    print("error sending to " + str(errorSending))
+    if len(errorSending) > 0:
+        print("error sending to " + str(errorSending))
+    else:
+        print("NO ERRORS")
     # checks if recipient file/entry is emtpy(prevents sending nobody)
     # checks if subject and message is empty (prevents sending empty messages)
     # show a (red *) next to boxes that need to have a message? or show a pop up message?
@@ -435,6 +448,9 @@ def startup():
     # canvas_height = 20
     # canvas_width = 200
 
+    # t1 = threading.Thread(target=loginpage)
+    # t1.start()
+    # t1.join()
     loginpage()
 
 
