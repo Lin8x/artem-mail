@@ -20,7 +20,7 @@ SendToTEXT = None  # reference to the text box of SEND TO section
 
 def topDecalBar():
     # top bar here
-    image = Image.open("topbar.jpg")
+    image = Image.open("topbar.gif")
     image = image.resize((image.size[0], 20), Image.ANTIALIAS)
     photo = ImageTk.PhotoImage(image)
     label = Label(image=photo)
@@ -29,7 +29,7 @@ def topDecalBar():
 
 
 def bottomDecalBar():
-    image = Image.open("topbar.jpg")
+    image = Image.open("topbar.gif")
     image = image.resize((image.size[0], 20), Image.ANTIALIAS)
     photo = ImageTk.PhotoImage(image)
     label = Label(image=photo)
@@ -55,7 +55,7 @@ def addHelpMenu(tkobject):
 def addlogo():
     # logo here
     topDecalBar()
-    image = Image.open("artemlogo.png")  # u need PNG file to store image Alpha
+    image = Image.open("artemlogo.gif")  # u need PNG file to store image Alpha
     image = image.resize((200, 100), Image.ANTIALIAS)
     photo = ImageTk.PhotoImage(image)
     label = Label(image=photo)
@@ -108,7 +108,7 @@ def loginpage():
 
     # logo here
     topDecalBar()
-    image = Image.open("artemlogo.png")  # u need PNG file to store image Alpha
+    image = Image.open("artemlogo.gif")
     image = image.resize((200, 100), Image.ANTIALIAS)
     photo = ImageTk.PhotoImage(image)
     label = Label(image=photo)
@@ -215,10 +215,11 @@ def checkLogin(userInput, passInput, storeUserandPass, button):  # prevents inva
                 # with open("rememberMe.artem","rb") as read:
                 #     info=read.read()
                 #     print(info.decode('utf-8'))#converts back to string
+            clearScreen()
             if can_pass:
                 homepage()
             else:
-                button.config(text="Login in")
+                loginpage()
                 messagebox.showerror(
                     "Incorrect Username or Password.",
                     "If your username and password is correct but you are still getting this error\n Visit the troubleshooting page https://github.com/asian-code/artem-mail/wiki")
