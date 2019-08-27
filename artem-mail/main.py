@@ -7,6 +7,7 @@ import sys
 import os
 from cryptography.fernet import Fernet
 import emailsender
+# import threading
 
 t = Tk()  # where m is the name of the main window object
 Recipient_fileUploadName = StringVar()  # needs to be of type StringVar for updating Label dynamically
@@ -19,7 +20,7 @@ SendToTEXT = None  # reference to the text box of SEND TO section
 
 def topDecalBar():
     # top bar here
-    image = Image.open("topbar.jpg")
+    image = Image.open("topbar.gif")
     image = image.resize((image.size[0], 20), Image.ANTIALIAS)
     photo = ImageTk.PhotoImage(image)
     label = Label(image=photo)
@@ -28,7 +29,7 @@ def topDecalBar():
 
 
 def bottomDecalBar():
-    image = Image.open("topbar.jpg")
+    image = Image.open("topbar.gif")
     image = image.resize((image.size[0], 20), Image.ANTIALIAS)
     photo = ImageTk.PhotoImage(image)
     label = Label(image=photo)
@@ -54,7 +55,7 @@ def addHelpMenu(tkobject):
 def addlogo():
     # logo here
     topDecalBar()
-    image = Image.open("artemlogo.png")  # u need PNG file to store image Alpha
+    image = Image.open("artemlogo.gif")  # u need PNG file to store image Alpha
     image = image.resize((200, 100), Image.ANTIALIAS)
     photo = ImageTk.PhotoImage(image)
     label = Label(image=photo)
@@ -107,7 +108,7 @@ def loginpage():
 
     # logo here
     topDecalBar()
-    image = Image.open("artemlogo.png")  # u need PNG file to store image Alpha
+    image = Image.open("artemlogo.gif")
     image = image.resize((200, 100), Image.ANTIALIAS)
     photo = ImageTk.PhotoImage(image)
     label = Label(image=photo)
@@ -137,7 +138,7 @@ def loginpage():
 
     quitButton = Button(t, text='Quit The Tool', width=20, height=2, relief=GROOVE, bd=3, font=("arial", 10, "bold"),
                         command=sys.exit)
-    loginButton = Button(t, text='Login in', width=20, height=2, relief=GROOVE, bd=3, font=("arial", 10, "bold"),
+    loginButton = Button(t, text='Login', width=20, height=2, relief=GROOVE, bd=3, font=("arial", 10, "bold"),
                          command=lambda: checkLogin(E1, E2, remember.get(), loginButton))
     spacer2 = Label(t, text=" ")
     loginButton.pack()
@@ -174,7 +175,14 @@ def loginpage():
     t.mainloop()
 
 
+# def checkLoginThread(userInput, passInput, storeUserandPass, button):
+#     t2 = threading.Thread(target=checkLogin, args=(userInput, passInput, storeUserandPass, button))
+#     t2.start()
+#     t2.join()
+
+
 def checkLogin(userInput, passInput, storeUserandPass, button):  # prevents invalid inputs
+
     button.config(text="Loading...")
     if userInput.get() == "" or passInput.get() == "":
         messagebox.showerror(
@@ -207,10 +215,11 @@ def checkLogin(userInput, passInput, storeUserandPass, button):  # prevents inva
                 # with open("rememberMe.artem","rb") as read:
                 #     info=read.read()
                 #     print(info.decode('utf-8'))#converts back to string
+            clearScreen()
             if can_pass:
                 homepage()
             else:
-                button.config(text="Login in")
+                loginpage()
                 messagebox.showerror(
                     "Incorrect Username or Password.",
                     "If your username and password is correct but you are still getting this error\n Visit the troubleshooting page https://github.com/asian-code/artem-mail/wiki")
@@ -284,14 +293,15 @@ def sendMessage(sub, mess, files=[]):
         data = SendToTEXT.get("1.0", END).replace(" ", "")  # remove whitespace
         data = data.split("\n")  # put every line in a list
         sendto = data
+        sendto.pop()
     else:  # from file
         print("Reading From: " + str(Recipient_fileUploadName.get()))
-        with open(Recipient_fileUploadName.get(), "r")as f:
+        with open(str(Recipient_fileUploadName.get()), "r")as f:
             data = f.readlines()
             sendto = data
             f.close()
 
-    print(sendto)
+    print("SENDTO:" + str(sendto))
     # checks if txt file/recipient entry is correctly formatted
     # checks if @ and ; are in the lines
     for person in sendto:
@@ -299,17 +309,25 @@ def sendMessage(sub, mess, files=[]):
             popup = messagebox.showerror("Information is not correctly formatted",
                                          "Please try again. for any help press the [ ? ] button")
             return
-        
+
+    # check for empty subject and messagebox
+    # print("Subject box{" + str(sub) + "}\nstrip version{" + sub.replace(" ", "") + "}END")
+    if sub.replace(" ", "") == "" or mess.replace(" ", "") == "":
+        popup = messagebox.showerror("Empty entries", "Please enter something in for subject and message box")
+    # send the emails
     print(sendto)
     person = 0
     try:
         while person < len(sendto):
-            emailsender.sendEmail(sendto, sub, mess)
+            print("Sending to " + str(sendto[person].split(";")))
+            emailsender.sendEmail(sendto[person].split(";")[1], sub, mess)
             person += 1
     except:
         errorSending.append(sendto[person])
-
-    print("error sending to " + str(errorSending))
+    if len(errorSending) > 0:
+        print("error sending to " + str(errorSending))
+    else:
+        print("NO ERRORS")
     # checks if recipient file/entry is emtpy(prevents sending nobody)
     # checks if subject and message is empty (prevents sending empty messages)
     # show a (red *) next to boxes that need to have a message? or show a pop up message?
@@ -431,6 +449,9 @@ def startup():
     # canvas_height = 20
     # canvas_width = 200
 
+    # t1 = threading.Thread(target=loginpage)
+    # t1.start()
+    # t1.join()
     loginpage()
 
 
