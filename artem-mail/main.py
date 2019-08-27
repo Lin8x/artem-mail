@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import time
 from tkinter import *
 from tkinter import messagebox, filedialog
 from PIL import Image, ImageTk
@@ -7,12 +8,16 @@ import sys
 import os
 from cryptography.fernet import Fernet
 import emailsender
+
 # import threading
 
 t = Tk()  # where m is the name of the main window object
 Recipient_fileUploadName = StringVar()  # needs to be of type StringVar for updating Label dynamically
 Files_fileUploadName = []  # stores all attachment locations
 SendToTEXT = None  # reference to the text box of SEND TO section
+window = None  # reference the Frame widget that holds all the elements inside
+Send_refer = None  # send image reference
+Restart_refer = None  # restart image reference
 
 
 # theme Decal functions here {
@@ -107,13 +112,7 @@ def loginpage():
     t.config(menu=menu)
 
     # logo here
-    topDecalBar()
-    image = Image.open("artemlogo.gif")
-    image = image.resize((200, 100), Image.ANTIALIAS)
-    photo = ImageTk.PhotoImage(image)
-    label = Label(image=photo)
-    label.image = photo  # keep a reference!
-    label.pack()
+    addlogo()
 
     # Everything below here is the buttons
     mainFont = ("arial", 11)
@@ -146,9 +145,9 @@ def loginpage():
     quitButton.pack()
     bottomDecalBar()
     # check if rememberMe file is there
-    if os.path.exists("rememberMe.artem"):
-        print("Found rememberMe.artem")
-        with open("rememberMe.artem", "rb") as file:
+    if os.path.exists("ArtemPreferences.artem"):
+        print("Found ArtemPreferences.artem")
+        with open("ArtemPreferences.artem", "rb") as file:
             # marks the rememberMe checkbox
             # rememberCheck.select()
             data = file.read()
@@ -160,6 +159,7 @@ def loginpage():
             fernet = Fernet(key)
             encrypted = fernet.decrypt(data[1].encode("utf-8"))
             # print("Encrypted data:"+encrypted.decode("utf-8"))
+            # display user and pass in Entry fields
             encrypted = encrypted.split()
             E1.insert(0, encrypted[0])
             E2.insert(0, encrypted[1])
@@ -200,12 +200,14 @@ def checkLogin(userInput, passInput, storeUserandPass, button):  # prevents inva
                 fernet = Fernet(key)
                 info = userInput.get() + " " + passInput.get()
                 encryptedData = fernet.encrypt(info.encode("utf-8"))
-                with open("rememberMe.artem", 'wb') as f:
+                with open("ArtemPreferences.artem", 'wb') as f:
                     f.write(key)
                     f.write("ZGFuaXNnYXk=".encode("utf-8"))
                     f.write(encryptedData)
+                    # Find a way to separate all important fields from each other
+
                     f.close()
-                    print("Created encrpted file name: rememberMe.artem")
+                    print("Created encrpted file name: ArtemPreferences.artem")
 
                 # with open("rememberMe.artem", "wb") as file:
                 #     info=userInput.get()+" "+passInput.get()
@@ -225,6 +227,7 @@ def checkLogin(userInput, passInput, storeUserandPass, button):  # prevents inva
                     "If your username and password is correct but you are still getting this error\n Visit the troubleshooting page https://github.com/asian-code/artem-mail/wiki")
         except Exception:
             messagebox.showerror("No Connection", "Unable to connect to servers")
+            raise
 
 
 # } login page stuff
@@ -279,6 +282,7 @@ def sentTo_Menu(section, makeMeGone, option=0):
 
 
 def restartHome():
+    '''Sets all field data back to None'''
     global Recipient_fileUploadName, Files_fileUploadName
     Recipient_fileUploadName = StringVar()
     Files_fileUploadName = []
@@ -338,12 +342,19 @@ def onFrameConfigure(canvas):  # megaScrollbar on the right side of screen
     canvas.configure(scrollregion=canvas.bbox("all"))
 
 
+def PageScale(event):
+    w, h = event.width, event.height
+    # print(str(w) + ", " + str(h))
+    window.update()
+    print("Updating WINDOW")
+
+
 def homepage():
     t.geometry("700x730")
     clearScreen()
     setTopBarMenus()
     # title = Label(t, text="Mail (Under development)", font=("arial", 12, "bold"))
-
+    global window
     canvas = Canvas(t, bd=0, highlightthickness=0, relief='ridge')  # background="#ffffff"
     megaScrollbar = Scrollbar(t, command=canvas.yview, width=25)
     window = Frame(canvas, bd=0, highlightthickness=0)  # background="#ffffff"
@@ -391,27 +402,37 @@ def homepage():
     # End buttons
     buttonContainer = Frame(window)
     buttonContainer.pack()
-    sendButton = Button(buttonContainer, text="Send Email", font=("arial", 10, "bold"), bd=3, relief=RAISED,
-                        width=30, height=2, fg="green",
+    # sendButton = Button(buttonContainer, text="Send Email", font=("arial", 10, "bold"), bd=3, relief=RAISED,
+    #                     width=30, height=2, fg="green",
+    #                     command=lambda: sendMessage(subjectInput.get(), messageTextBox.get("1.0", END),
+    #                                                 Files_fileUploadName))
+    # restartButton = Button(buttonContainer, text="Restart", font=("arial", 10, "bold"), bd=3, relief=RAISED,
+    #                        command=restartHome, width=30, height=2, fg="red")
+
+    # Image buttons
+    global Send_refer, Restart_refer
+    imageSize = (200, 70)
+
+    image1 = Image.open("RestartButton.png")
+    image1 = image1.resize(imageSize, Image.ANTIALIAS)
+    RestartImage = ImageTk.PhotoImage(image1)
+    Restart_refer = RestartImage  # keep a reference
+
+    image2 = Image.open("SendButton.png")
+    image2 = image2.resize(imageSize, Image.ANTIALIAS)  # resize(width,height)
+    SendImage = ImageTk.PhotoImage(image2)
+    Send_refer = SendImage  # keep a reference
+
+    sendButton = Button(buttonContainer, image=SendImage, height=80, width=200, bd=0,
+                        # must be bottom, center, left, none, right, or top
                         command=lambda: sendMessage(subjectInput.get(), messageTextBox.get("1.0", END),
                                                     Files_fileUploadName))
-    restartButton = Button(buttonContainer, text="Restart", font=("arial", 10, "bold"), bd=3, relief=RAISED,
-                           command=restartHome, width=30, height=2, fg="red")
-
-    # image1 = Image.open("RestartButton.png")
-    # image1 = image1.resize((100, 100), Image.ANTIALIAS)
-    # RestartImage = ImageTk.PhotoImage(image1)
-    # image2 = Image.open("SendButton.png")
-    # SendImage = SendImage.resize((100, 100), Image.ANTIALIAS)
-    # SendImage = ImageTk.PhotoImage(image2)
-    # WTF DAN HELP ME!!!!!!!!!!!! IMAGES FOR MY BUTTONS DONT WORK ***************************************************
-    # sendButton = Button(buttonContainer, image=SendImage, height=40, width=200)
-    # restartButton = Button(buttonContainer, image=RestartImage, height=40, width=200, command=restartHome)
+    restartButton = Button(buttonContainer, image=RestartImage, height=80, width=200, bd=0, command=restartHome)
 
     restartButton.grid(row=0, sticky=W, padx=10, pady=10)
     sendButton.grid(row=0, column=1, sticky=E, padx=10, pady=10)
     bottomDecalBar()  # this stay at bottom
-
+    t.bind("<Configure>", PageScale)  # updates window when resizes the window
     # } main page
 
 
@@ -435,23 +456,7 @@ def openSite(site=0):  # dynamic github site opener
 
 def startup():
     t.title("Artem Mail Tool")  # title of the tool
-    TITLE_FONT = ("Helvetica", 18, "bold")  # The font of words
-
-    # A frane is a rectangular region on the screen
-    # frame = Frame(t)
-    # frame.pack()
-    # bottomframe = Frame(t)
-    # bottomframe.pack(side=BOTTOM)
-
-    # A Canvas is used to draw pictures and other complex layout like graphics, text and widgets.
-    # c = Canvas(t, width=0, height=0)
-    # c.pack()
-    # canvas_height = 20
-    # canvas_width = 200
-
-    # t1 = threading.Thread(target=loginpage)
-    # t1.start()
-    # t1.join()
+    # TITLE_FONT = ("Helvetica", 18, "bold")  # The font of words
     loginpage()
 
 
