@@ -11,7 +11,7 @@ import emailsender
 
 # import threading
 
-t = Tk()  # where m is the name of the main window object
+t = Tk()  # where t is the name of the main window object
 Recipient_fileUploadName = StringVar()  # needs to be of type StringVar for updating Label dynamically
 Files_fileUploadName = []  # stores all attachment locations
 SendToTEXT = None  # reference to the text box of SEND TO section
@@ -350,14 +350,18 @@ def PageScale(event):
 
 
 def homepage():
-    t.geometry("700x730")
-    clearScreen()
+    global t
+    t.destroy()
+    t = Tk()
+    t.title("Artem Mail")
+    t.geometry("700x800")  # (width,height)
+    # clearScreen()
     setTopBarMenus()
     # title = Label(t, text="Mail (Under development)", font=("arial", 12, "bold"))
     global window
     canvas = Canvas(t, bd=0, highlightthickness=0, relief='ridge')  # background="#ffffff"
     megaScrollbar = Scrollbar(t, command=canvas.yview, width=25)
-    window = Frame(canvas, bd=0, highlightthickness=0)  # background="#ffffff"
+    window = Frame(canvas, bd=3, highlightthickness=3)  # background="#ffffff"
     canvas.configure(yscrollcommand=megaScrollbar.set)
 
     section1 = LabelFrame(window, text="1.Send To")
@@ -383,7 +387,9 @@ def homepage():
     megaScrollbar.pack(side=RIGHT, fill=Y)
     addlogo()
     canvas.pack(fill=BOTH, expand=True)
-    canvas.create_window((4, 4), window=window, anchor="nw")
+    canvas.create_window(0, 0, window=window, anchor=N + W)
+    # window.pack(fill=X)
+    # scrolls up/down of the window(Frame)
     window.bind("<Configure>", lambda event, canvas=canvas: onFrameConfigure(canvas))
     # Send to -section
     section1.pack(fill=X)
@@ -411,7 +417,7 @@ def homepage():
 
     # Image buttons
     global Send_refer, Restart_refer
-    imageSize = (200, 70)
+    imageSize = (200, 70)  # resize(width,height)
 
     image1 = Image.open("RestartButton.png")
     image1 = image1.resize(imageSize, Image.ANTIALIAS)
@@ -419,20 +425,20 @@ def homepage():
     Restart_refer = RestartImage  # keep a reference
 
     image2 = Image.open("SendButton.png")
-    image2 = image2.resize(imageSize, Image.ANTIALIAS)  # resize(width,height)
+    image2 = image2.resize(imageSize, Image.ANTIALIAS)
     SendImage = ImageTk.PhotoImage(image2)
     Send_refer = SendImage  # keep a reference
 
-    sendButton = Button(buttonContainer, image=SendImage, height=80, width=200, bd=0,
+    sendButton = Button(buttonContainer, image=SendImage, height=100, width=250, bd=0,
                         # must be bottom, center, left, none, right, or top
                         command=lambda: sendMessage(subjectInput.get(), messageTextBox.get("1.0", END),
                                                     Files_fileUploadName))
-    restartButton = Button(buttonContainer, image=RestartImage, height=80, width=200, bd=0, command=restartHome)
+    restartButton = Button(buttonContainer, image=RestartImage, height=100, width=250, bd=0, command=restartHome)
 
     restartButton.grid(row=0, sticky=W, padx=10, pady=10)
     sendButton.grid(row=0, column=1, sticky=E, padx=10, pady=10)
     bottomDecalBar()  # this stay at bottom
-    t.bind("<Configure>", PageScale)  # updates window when resizes the window
+    # t.bind("<Configure>", PageScale)  # updates window when resizes the window
     # } main page
 
 
@@ -455,7 +461,7 @@ def openSite(site=0):  # dynamic github site opener
 
 
 def startup():
-    t.title("Artem Mail Tool")  # title of the tool
+    t.title("Artem Mail Login")  # title of the tool
     # TITLE_FONT = ("Helvetica", 18, "bold")  # The font of words
     loginpage()
 
@@ -463,6 +469,10 @@ def startup():
 def clearScreen():
     for i in t.winfo_children():  # loops through all children(widgets)
         i.destroy()
+    # global t
+    # t.destroy()
+    # t = Tk()
+    # t.title("Artem Mail")
 
 
 startup()
