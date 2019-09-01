@@ -212,7 +212,7 @@ def checkLogin(userInput, passInput, storeUserandPass, button):  # prevents inva
                 fernet = Fernet(key)
                 info = userInput.get() + " " + passInput.get()
                 encryptedData = fernet.encrypt(info.encode("utf-8"))
-                with open(resource_path("ArtemPreferences.artem", 'wb')) as f:
+                with open(resource_path("ArtemPreferences.artem"), 'wb') as f:
                     f.write(key)
                     f.write("ZGFuaXNnYXk=".encode("utf-8"))
                     f.write(encryptedData)
