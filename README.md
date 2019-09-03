@@ -41,6 +41,7 @@ Double click the `ArtemMail.exe` file in the folder `Windows_Version` to run the
 (Under development)
 ### For Mac users:
 (Under development)
+<br><br>
 *Please read our ![Logging In](https://github.com/asian-code/artem-mail/wiki/Logging-In) and [Sending an Email](https://github.com/asian-code/artem-mail/wiki/Sending-an-Email) wiki page for more information!*
 
 <img src="https://github.com/asian-code/artem-mail/blob/master/images/topbargithub.gif" width="100%" height="5">
