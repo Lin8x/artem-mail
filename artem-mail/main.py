@@ -9,7 +9,7 @@ import os
 from cryptography.fernet import Fernet
 import emailsender
 
-# import threading
+# pyinstaller -F --add-data topbar.gif;. --add-data artemlogo.gif;. --add-data RestartButton.png;. --add-data SendButton.png;. --add-data icon.ico;. -i icon.ico ArtemMail.py
 
 t = Tk()  # where t is the name of the main window object
 # needs to be of type StringVar for updating Label dynamically
@@ -70,7 +70,8 @@ def addHelpMenu(tkobject):
 def addlogo():
     # logo here
     topDecalBar()
-    image = Image.open(resource_path("artemlogo.gif"))  # u need PNG file to store image Alpha
+    # u need PNG file to store image Alpha
+    image = Image.open(resource_path("artemlogo.gif"))
     image = image.resize((200, 100), Image.ANTIALIAS)
     photo = ImageTk.PhotoImage(image)
     label = Label(image=photo)
@@ -97,9 +98,9 @@ def setTopBarMenus():
     topmenu.add_cascade(label='File', menu=filemenu)
 
     # settings menu button
-    settingsmenu = Menu(topmenu, tearoff=0)
-    settingsmenu.add_command(label='Options')
-    topmenu.add_cascade(label='Settings', menu=settingsmenu)
+    # settingsmenu = Menu(topmenu, tearoff=0)
+    # settingsmenu.add_command(label='Options')
+    # topmenu.add_cascade(label='Settings', menu=settingsmenu)
 
     # help menu button
     helpmenu = addHelpMenu(topmenu)
@@ -233,10 +234,11 @@ def checkLogin(userInput, passInput, storeUserandPass, button):  # prevents inva
             if can_pass:
                 homepage()
             else:
-                loginpage()
                 messagebox.showerror(
-                    "Incorrect Username or Password.",
+                    "Incorrect Username or Password",
                     "If your username and password is correct but you are still getting this error\n Visit the troubleshooting page https://github.com/asian-code/artem-mail/wiki")
+                loginpage()
+              
         except Exception:
             messagebox.showerror(
                 "No Connection", "Unable to connect to servers")
@@ -289,10 +291,10 @@ def sentTo_Menu(section, makeMeGone, option=0):
                          "# Example:\nJohn Smith;johnny@gmail.com\nJames William;willi@gmail.com\n;kittylover@gmail.com")
         BIGemails.grid(row=0, pady=15, padx=10)
         scrll.grid(row=0, column=81, sticky="NS")
-        questionButton = Button(section, text="?", font=("arial", 15, "bold"), relief=GROOVE, bd=3, width=2,
-                                command=helpMessage)
-        questionButton.grid(row=0, column=100, padx=3, pady=1)
         SendToTEXT = BIGemails  # reference for later processing of data
+    questionButton = Button(section, text="?", font=("arial", 15, "bold"), relief=GROOVE, bd=3, width=2,
+                                command=helpMessage)
+    questionButton.grid(row=0, column=100, padx=3, pady=1)
 
 
 def restartHome():
@@ -370,6 +372,7 @@ def homepage():
     t = Tk()
     t.title("Artem Mail")
     t.geometry("700x800")  # (width,height)
+    t.iconbitmap(resource_path("icon.ico"))
     # clearScreen()
     setTopBarMenus()
     # title = Label(t, text="Mail (Under development)", font=("arial", 12, "bold"))
@@ -377,7 +380,7 @@ def homepage():
     canvas = Canvas(t, bd=0, highlightthickness=0,
                     relief='ridge')  # background="#ffffff"
     megaScrollbar = Scrollbar(t, command=canvas.yview, width=25)
-    window = Frame(canvas, bd=3, highlightthickness=3)  # background="#ffffff"
+    window = Frame(canvas, bd=0, highlightthickness=0)  # background="#ffffff"
     canvas.configure(yscrollcommand=megaScrollbar.set)
 
     section1 = LabelFrame(window, text="1.Send To")
@@ -410,7 +413,7 @@ def homepage():
     # window.pack(fill=X)
     # scrolls up/down of the window(Frame)
     window.bind("<Configure>", lambda event,
-                                      canvas=canvas: onFrameConfigure(canvas))
+                canvas=canvas: onFrameConfigure(canvas))
     # Send to -section
     section1.pack(fill=X)
     sendMenu.config(relief=RAISED)
@@ -483,6 +486,7 @@ def openSite(site=0):  # dynamic github site opener
 
 def startup():
     t.title("Artem Mail Login")  # title of the tool
+    t.iconbitmap(resource_path("icon.ico"))
     # TITLE_FONT = ("Helvetica", 18, "bold")  # The font of words
     loginpage()
 
@@ -494,6 +498,4 @@ def clearScreen():
     # t.destroy()
     # t = Tk()
     # t.title("Artem Mail")
-
-
 startup()
