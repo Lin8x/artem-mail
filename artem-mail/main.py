@@ -156,9 +156,9 @@ def loginpage():
     quitButton.pack()
     bottomDecalBar()
     # check if rememberMe file is there
-    if os.path.exists(resource_path("ArtemPreferences.artem")):
+    if os.path.exists("ArtemPreferences.artem"):
         print("Found ArtemPreferences.artem")
-        with open(resource_path("ArtemPreferences.artem", "rb")) as file:
+        with open("ArtemPreferences.artem", "rb") as file:
             # marks the rememberMe checkbox
             # rememberCheck.select()
             data = file.read()
@@ -212,7 +212,7 @@ def checkLogin(userInput, passInput, storeUserandPass, button):  # prevents inva
                 fernet = Fernet(key)
                 info = userInput.get() + " " + passInput.get()
                 encryptedData = fernet.encrypt(info.encode("utf-8"))
-                with open(resource_path("ArtemPreferences.artem"), 'wb') as f:
+                with open("ArtemPreferences.artem", 'wb') as f:
                     f.write(key)
                     f.write("ZGFuaXNnYXk=".encode("utf-8"))
                     f.write(encryptedData)
