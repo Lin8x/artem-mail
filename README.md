@@ -1,7 +1,7 @@
 <img src="https://github.com/Lin8x/artem-mail/blob/master/images/topbargithub.gif" width="100%" height="5">
 
 <p align="center">
-<img src="https://github.com/Lin8x/artem-mail/blob/master/artem-mail/artemlogo.png">
+<img src="https://github.com/Lin8x/artem-mail/blob/master/artem-mail/artemlogo.gif">
 </p>
 
 <img src="https://github.com/Lin8x/artem-mail/blob/master/images/topbargithub.gif" width="100%" height="5">
