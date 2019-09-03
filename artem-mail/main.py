@@ -12,7 +12,8 @@ import emailsender
 # import threading
 
 t = Tk()  # where t is the name of the main window object
-Recipient_fileUploadName = StringVar()  # needs to be of type StringVar for updating Label dynamically
+# needs to be of type StringVar for updating Label dynamically
+Recipient_fileUploadName = StringVar()
 Files_fileUploadName = []  # stores all attachment locations
 SendToTEXT = None  # reference to the text box of SEND TO section
 window = None  # reference the Frame widget that holds all the elements inside
@@ -20,12 +21,21 @@ Send_refer = None  # send image reference
 Restart_refer = None  # restart image reference
 
 
-# theme Decal functions here {
+def resource_path(relative_path):
+    # Get absolute path to resource, works for dev and for PyInstaller
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+    # theme Decal functions here {
 
 
 def topDecalBar():
     # top bar here
-    image = Image.open("topbar.gif")
+    image = Image.open(resource_path("topbar.gif"))
     image = image.resize((image.size[0], 20), Image.ANTIALIAS)
     photo = ImageTk.PhotoImage(image)
     label = Label(image=photo)
@@ -34,7 +44,7 @@ def topDecalBar():
 
 
 def bottomDecalBar():
-    image = Image.open("topbar.gif")
+    image = Image.open(resource_path("topbar.gif"))
     image = image.resize((image.size[0], 20), Image.ANTIALIAS)
     photo = ImageTk.PhotoImage(image)
     label = Label(image=photo)
@@ -60,7 +70,7 @@ def addHelpMenu(tkobject):
 def addlogo():
     # logo here
     topDecalBar()
-    image = Image.open("artemlogo.gif")  # u need PNG file to store image Alpha
+    image = Image.open(resource_path("artemlogo.gif"))  # u need PNG file to store image Alpha
     image = image.resize((200, 100), Image.ANTIALIAS)
     photo = ImageTk.PhotoImage(image)
     label = Label(image=photo)
@@ -131,7 +141,8 @@ def loginpage():
     E2.pack()
     # remember me checkboc
     remember = IntVar()
-    rememberCheck = Checkbutton(t, text="  Remeber me", variable=remember, font=mainFont)  # 0=off 1=on
+    rememberCheck = Checkbutton(
+        t, text="  Remeber me", variable=remember, font=mainFont)  # 0=off 1=on
     rememberCheck.pack()
     spacer.pack()
 
@@ -192,7 +203,8 @@ def checkLogin(userInput, passInput, storeUserandPass, button):  # prevents inva
             "Invalid Input", "You have reached the max character threshold\nPlease try again")
     else:
         try:
-            can_pass = emailsender.login_to_email(userInput.get(), passInput.get())
+            can_pass = emailsender.login_to_email(
+                userInput.get(), passInput.get())
             # print("Variavle :"+str(storeUserandPass))
             if storeUserandPass == 1:
                 # stores new info into system
@@ -226,7 +238,8 @@ def checkLogin(userInput, passInput, storeUserandPass, button):  # prevents inva
                     "Incorrect Username or Password.",
                     "If your username and password is correct but you are still getting this error\n Visit the troubleshooting page https://github.com/asian-code/artem-mail/wiki")
         except Exception:
-            messagebox.showerror("No Connection", "Unable to connect to servers")
+            messagebox.showerror(
+                "No Connection", "Unable to connect to servers")
             raise
 
 
@@ -262,7 +275,8 @@ def sentTo_Menu(section, makeMeGone, option=0):
                                       command=selectRecipentFile, bd=3)
         text = Label(section, text="Upload a txt file :", font=("arial", 10))
         # var = selectrecipentButton.get
-        fileLoc = Label(section, textvariable=Recipient_fileUploadName)  # os.path.basename(Recipient_fileUploadName)
+        # os.path.basename(Recipient_fileUploadName)
+        fileLoc = Label(section, textvariable=Recipient_fileUploadName)
         text.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
         selectrecipentButton.grid(row=0, column=3, padx=10, pady=10)
         fileLoc.grid(row=0, column=5, padx=10, pady=10)
@@ -317,7 +331,8 @@ def sendMessage(sub, mess, files=[]):
     # check for empty subject and messagebox
     # print("Subject box{" + str(sub) + "}\nstrip version{" + sub.replace(" ", "") + "}END")
     if sub.replace(" ", "") == "" or mess.replace(" ", "") == "":
-        popup = messagebox.showerror("Empty entries", "Please enter something in for subject and message box")
+        popup = messagebox.showerror(
+            "Empty entries", "Please enter something in for subject and message box")
     # send the emails
     print(sendto)
     person = 0
@@ -359,7 +374,8 @@ def homepage():
     setTopBarMenus()
     # title = Label(t, text="Mail (Under development)", font=("arial", 12, "bold"))
     global window
-    canvas = Canvas(t, bd=0, highlightthickness=0, relief='ridge')  # background="#ffffff"
+    canvas = Canvas(t, bd=0, highlightthickness=0,
+                    relief='ridge')  # background="#ffffff"
     megaScrollbar = Scrollbar(t, command=canvas.yview, width=25)
     window = Frame(canvas, bd=3, highlightthickness=3)  # background="#ffffff"
     canvas.configure(yscrollcommand=megaScrollbar.set)
@@ -374,14 +390,17 @@ def homepage():
     sendMenu = Menubutton(section1, text="Select Option")
     sendMenu.menu = Menu(sendMenu, tearoff=0)
     sendMenu["menu"] = sendMenu.menu
-    sendMenu.menu.add_command(label="1. Emails in file", command=lambda: sentTo_Menu(section1, sendMenu))
+    sendMenu.menu.add_command(
+        label="1. Emails in file", command=lambda: sentTo_Menu(section1, sendMenu))
     sendMenu.menu.add_command(label="2. Enter recipients",
                               command=lambda: sentTo_Menu(section1, sendMenu, option=1))
 
     messageTextBox = Text(section3, bd=1, width=60, height=15)
-    messageScroll = Scrollbar(section3, command=messageTextBox.yview, orient=VERTICAL, width=25)
+    messageScroll = Scrollbar(
+        section3, command=messageTextBox.yview, orient=VERTICAL, width=25)
     messageTextBox.config(yscrollcommand=messageScroll.set)
-    AddAttachments = Button(section4, text="Add Attachments", relief=GROOVE, command=get_file_attachment)
+    AddAttachments = Button(section4, text="Add Attachments",
+                            relief=GROOVE, command=get_file_attachment)
 
     # Layout is designed here
     megaScrollbar.pack(side=RIGHT, fill=Y)
@@ -390,7 +409,8 @@ def homepage():
     canvas.create_window(0, 0, window=window, anchor=N + W)
     # window.pack(fill=X)
     # scrolls up/down of the window(Frame)
-    window.bind("<Configure>", lambda event, canvas=canvas: onFrameConfigure(canvas))
+    window.bind("<Configure>", lambda event,
+                                      canvas=canvas: onFrameConfigure(canvas))
     # Send to -section
     section1.pack(fill=X)
     sendMenu.config(relief=RAISED)
@@ -419,12 +439,12 @@ def homepage():
     global Send_refer, Restart_refer
     imageSize = (200, 70)  # resize(width,height)
 
-    image1 = Image.open("RestartButton.png")
+    image1 = Image.open(resource_path("RestartButton.png"))
     image1 = image1.resize(imageSize, Image.ANTIALIAS)
     RestartImage = ImageTk.PhotoImage(image1)
     Restart_refer = RestartImage  # keep a reference
 
-    image2 = Image.open("SendButton.png")
+    image2 = Image.open(resource_path("SendButton.png"))
     image2 = image2.resize(imageSize, Image.ANTIALIAS)
     SendImage = ImageTk.PhotoImage(image2)
     Send_refer = SendImage  # keep a reference
@@ -433,7 +453,8 @@ def homepage():
                         # must be bottom, center, left, none, right, or top
                         command=lambda: sendMessage(subjectInput.get(), messageTextBox.get("1.0", END),
                                                     Files_fileUploadName))
-    restartButton = Button(buttonContainer, image=RestartImage, height=100, width=250, bd=0, command=restartHome)
+    restartButton = Button(buttonContainer, image=RestartImage,
+                           height=100, width=250, bd=0, command=restartHome)
 
     restartButton.grid(row=0, sticky=W, padx=10, pady=10)
     sendButton.grid(row=0, column=1, sticky=E, padx=10, pady=10)
