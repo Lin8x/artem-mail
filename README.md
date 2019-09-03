@@ -19,7 +19,10 @@ Artem NexGen is an international network of high-achieving youth pursuing profes
 <img src="https://github.com/asian-code/artem-mail/blob/master/images/topbargithub.gif" width="100%" height="5">
 
 ## <p align="center"> <img src="https://raw.githubusercontent.com/asian-code/artem-mail/master/images/requirementslogo.png" alt="requirements"> &nbsp; Requirements &nbsp; <img src="https://raw.githubusercontent.com/asian-code/artem-mail/master/images/requirementslogo.png" alt="requirements" width="20" height="20"> </p>
-
+<br>
+* A computer running Windows, Mac, or linux OS<br>
+* A constant stable wifi connection<br>
+* About 50 MB of storage on your computer<br>
 <img src="https://github.com/asian-code/artem-mail/blob/master/images/topbargithub.gif" width="100%" height="5">
 
 ## <p align="center"> ![download logo](https://raw.githubusercontent.com/asian-code/artem-mail/master/images/howtoinstallimage.png) &nbsp; How to Install &nbsp; ![download logo](https://raw.githubusercontent.com/asian-code/artem-mail/master/images/howtoinstallimage.png) </p>
