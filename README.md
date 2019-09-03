@@ -36,7 +36,11 @@ Artem NexGen is an international network of high-achieving youth pursuing profes
 ## <p align="center"> <img src="https://raw.githubusercontent.com/asian-code/artem-mail/master/images/howtorunimage.png" alt="running logo" width="20" height="20"> &nbsp; How to Run &nbsp; <img src="https://raw.githubusercontent.com/asian-code/artem-mail/master/images/howtorunimage.png" alt="running logo" width="20" height="20"> </p>
 
 ### For Windows users:
-Double click the EXE file in the folder called `Windows_Version`<br>
+Double click the `ArtemMail.exe` file in the folder `Windows_Version` to run the program.<br>
+### For Linux users:
+(Under development)
+### For Mac users:
+(Under development)
 *Please read our ![Logging In](https://github.com/asian-code/artem-mail/wiki/Logging-In) and [Sending an Email](https://github.com/asian-code/artem-mail/wiki/Sending-an-Email) wiki page for more information!*
 
 <img src="https://github.com/asian-code/artem-mail/blob/master/images/topbargithub.gif" width="100%" height="5">
